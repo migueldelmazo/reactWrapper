@@ -60,10 +60,9 @@ gulp.task('copy-html', function() {
 });
 
 gulp.task('lint', function () {
-    return gulp.src(['app/**/*.js', 'app/**/*.jsx'])
+    return gulp.src(['app/**/*'])
       .pipe(eslint())
-      .pipe(eslint.format())/*
-      .pipe(eslint.failOnError())*/;
+      .pipe(eslint.format());
 });
 
 gulp.task('browser-sync', function() {

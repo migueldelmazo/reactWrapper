@@ -1,5 +1,6 @@
 'use strict';
 
-var React = require('./lib/reactWrapper');
+import React from './lib/reactWrapper';
+import AppView from './views/App.jsx';
 
-React.render(<p>Hello world!!!</p>, document.body);
+React.render(<AppView />, document.body);
