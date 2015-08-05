@@ -9,9 +9,24 @@ export default React.createClass({
 
   _atom: [
     {
-      state: 'addresses',
-      atom: AddressesStore.atom.userAddresses,
-      initialValue: []
+      // state: 'address',
+      atom: AddressesStore.atom.address,
+      initialValue: 'no address'
+    },
+    {
+      state: 'payment',
+      // atom: AddressesStore.atom.payment,
+      initialValue: 'no payment'
+    },
+    {
+      state: 'price',
+      atom: AddressesStore.atom.price,
+      initialValue: 'no price'
+    },
+    {
+      state: 'user',
+      atom: AddressesStore.atom.user,
+      initialValue: 'no user'
     }
   ],
 
@@ -21,7 +36,12 @@ export default React.createClass({
 
   _render () {
     return (
-      <p>Hello world!!!{this.state.addresses.length}</p>
+      <ul>
+        <li>Address: {this.atomGet(AddressesStore.atom.address)}</li>
+        <li>Payment: {this.state.payment}</li>
+        <li>Price: {this.state.price}</li>
+        <li>User: {this.state.user}</li>
+      </ul>
     );
   }
 });

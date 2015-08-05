@@ -11,7 +11,7 @@ var atom = {},
   changedAttrs = [],
 
   onChangeDebounced = _.debounce(function () {
-    var attrs = changedAttrs;
+    var attrs = _.uniq(changedAttrs);
     changedAttrs = [];
     _.each(contexts, function (context) {
       context.atomChanged(attrs);
@@ -42,9 +42,7 @@ module.exports = {
 
   get (attr) {
     return _.get(atom, attr);
-  },
-
-  checkAttr (attrs, attr) {
-    return attrs.indexOf(attr) >= 0;
   }
 };
+
+window.atom = atom;

@@ -4,6 +4,66 @@ import _ from 'lodash';
 import React from 'react';
 import Atom from './atom';
 
+var // render helpers
+
+  enableRender = function () {
+    this._shouldRender = true;
+  },
+
+  disableRender = function () {
+    this._shouldRender = false;
+  },
+
+  shouldRender = function () {
+    return this._shouldRender;
+  },
+
+  // state helpers
+
+  ensureStateAttrs = function () {
+    _.each(this._atom, function (item) {
+      if (!item.state) {
+        item.state = _.uniqueId('_atomBackup');
+      }
+    });
+  },
+
+  getInitialState = function () {
+    return _.reduce(this._atom, function (state, item) {
+      state[item.state] = item.initialValue;
+      return state;
+    }, {});
+  },
+
+  getNewState = function () {
+    return _.reduce(this._atom, function (newState, item) {
+      var atomValue;
+      if (item.atom) {
+        atomValue = this.atomGet(item.atom);
+        if (!_.isEqual(atomValue, _.get(this.state, item.state))) {
+          _.set(newState, item.state, atomValue);
+        }
+      }
+      return newState;
+    }, {}, this);
+  },
+
+  // utils
+
+  analytics = function (msg) {
+    console.log(this._displayName + ':', msg);
+  },
+
+  parseToObj = function (key, value) {
+    var state = {};
+    if (_.isPlainObject(key)) {
+      state = key;
+    } else {
+      _.set(state, key, value);
+    }
+    return state;
+  };
+
 // wrap React.createClass
 React._createClass = React.createClass;
 
@@ -29,50 +89,31 @@ React.createClass = function (spec) {
     _.result(this, '_componentDidUnmount');
   };
 
-  // analytics
-
-  spec.analytics = function (msg) {
-    console.log(this._displayName, msg);
-  };
-
   // render
 
   spec.render = function () {
-    this.analytics('render');
-    this._shouldRender = false;
+    analytics.call(this, 'render');
+    disableRender.call(this);
     return this._render();
   };
 
   // shouldComponentUpdate
 
   spec.shouldComponentUpdate = function (props) {
-    return this._shouldRender || !_.isEqual(this.props, props);
+    return shouldRender.call(this) || !_.isEqual(this.props, props);
   };
 
   // state
 
   spec.getInitialState = function () {
-    var state = {};
-    _.each(this._atom, function (item) {
-      state[item.state] = item.initialValue;
-    });
-    return state;
+    ensureStateAttrs.call(this);
+    return getInitialState.call(this);
   };
 
   spec._setState = function (key, value) {
-    var state = {},
-      newState;
-
-    if (_.isPlainObject(key)) {
-      state = key;
-    } else {
-      state[key] = value;
-    }
-
-    newState = _.extend({}, this.state, state);
-
+    var newState = _.extend({}, this.state, parseToObj(key, value));
     if (!_.isEqual(this.state, newState)) {
-      this._shouldRender = true;
+      enableRender.call(this);
       this.setState(newState);
     }
   };
@@ -80,11 +121,8 @@ React.createClass = function (spec) {
   // atom
 
   spec.atomChanged = function (attrs) {
-    _.each(this._atom, function (item) {
-      if (Atom.checkAttr(attrs, item.atom)) {
-        this._setState(item.state, this.atomGet(item.atom));
-      }
-    }, this);
+    var newState = getNewState.call(this);
+    this._setState(newState);
   };
 
   spec.atomGet = function (attr) {

@@ -1,18 +1,23 @@
 'use strict';
 
 import Atom from '../lib/atom';
-import AddressesService from '../service/Addresses';
 
 var store = {
 
   atom: {
-    userAddresses: 'addresses'
+    address: 'address',
+    payment: 'payment',
+    price: 'foo.price',
+    user: 'user'
   },
 
   receiveAddresses () {
-    AddressesService.getAddresses(function (data) {
-      Atom.set(store.atom.userAddresses, data.addresses);
-    });
+    setTimeout(function () {
+      Atom.set(store.atom.address, 'My street');
+      // Atom.set(store.atom.payment, 'Visa');
+      Atom.set(store.atom.price, 'Price');
+      Atom.set(store.atom.user, 'Miguel');
+    }, 3000);
   }
 
 };
