@@ -14,10 +14,14 @@ var store = {
   receiveAddresses () {
     setTimeout(function () {
       Atom.set(store.atom.address, 'My street');
-      // Atom.set(store.atom.payment, 'Visa');
+      Atom.set(store.atom.payment, 'Visa');
       Atom.set(store.atom.price, 'Price');
       Atom.set(store.atom.user, 'Miguel');
-    }, 3000);
+    }, 1000);
+  },
+
+  foo () {
+    return 1234;
   }
 
 };

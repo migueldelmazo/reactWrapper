@@ -4,48 +4,12 @@ import _ from 'lodash';
 import React from 'react';
 import Atom from './atom';
 
-var // render helpers
+var // state
 
-  enableRender = function () {
-    this._shouldRender = true;
-  },
-
-  disableRender = function () {
-    this._shouldRender = false;
-  },
-
-  shouldRender = function () {
-    return this._shouldRender;
-  },
-
-  // state helpers
-
-  ensureStateAttrs = function () {
-    _.each(this._atom, function (item) {
-      if (!item.state) {
-        item.state = _.uniqueId('_atomBackup');
-      }
+  wrapSetStateFn = function () {
+    this.setState = _.wrap(this.setState, function (setStateFn, key, value) {
+      setStateFn.call(this, parseToObj(key, value));
     });
-  },
-
-  getInitialState = function () {
-    return _.reduce(this._atom, function (state, item) {
-      state[item.state] = item.initialValue;
-      return state;
-    }, {});
-  },
-
-  getNewState = function () {
-    return _.reduce(this._atom, function (newState, item) {
-      var atomValue;
-      if (item.atom) {
-        atomValue = this.atomGet(item.atom);
-        if (!_.isEqual(atomValue, _.get(this.state, item.state))) {
-          _.set(newState, item.state, atomValue);
-        }
-      }
-      return newState;
-    }, {}, this);
   },
 
   // utils
@@ -55,13 +19,13 @@ var // render helpers
   },
 
   parseToObj = function (key, value) {
-    var state = {};
+    var obj = {};
     if (_.isPlainObject(key)) {
-      state = key;
+      obj = key;
     } else {
-      _.set(state, key, value);
+      _.set(obj, key, value);
     }
-    return state;
+    return obj;
   };
 
 // wrap React.createClass
@@ -76,57 +40,45 @@ React.createClass = function (spec) {
     _.result(this, '_componentWillMount');
   };
 
-  spec.componentDidMount = function () {
-    _.result(this, '_componentDidMount');
-  };
-
   spec.componentWillUnmount = function () {
     Atom.off(this);
     _.result(this, '_componentWillUnmount');
   };
 
-  spec.componentDidUnmount = function () {
-    _.result(this, '_componentDidUnmount');
+  // shouldComponentUpdate
+
+  spec.shouldComponentUpdate = function (props) {
+    return !_.isEqual(this.props, props);
   };
 
   // render
 
   spec.render = function () {
     analytics.call(this, 'render');
-    disableRender.call(this);
     return this._render();
-  };
-
-  // shouldComponentUpdate
-
-  spec.shouldComponentUpdate = function (props) {
-    return shouldRender.call(this) || !_.isEqual(this.props, props);
   };
 
   // state
 
   spec.getInitialState = function () {
-    ensureStateAttrs.call(this);
-    return getInitialState.call(this);
-  };
-
-  spec._setState = function (key, value) {
-    var newState = _.extend({}, this.state, parseToObj(key, value));
-    if (!_.isEqual(this.state, newState)) {
-      enableRender.call(this);
-      this.setState(newState);
-    }
+    wrapSetStateFn.call(this);
+    return this._state || {};
   };
 
   // atom
 
-  spec.atomChanged = function (attrs) {
-    var newState = getNewState.call(this);
-    this._setState(newState);
+  spec.onAtomChanged = function () {
+    this.forceUpdate();
   };
 
   spec.atomGet = function (attr) {
     return Atom.get(attr);
+  };
+
+  // actions
+
+  spec.updState = function (action) {
+    this.setState(action.attr, action.fn.call(action.ctx));
   };
 
   return React._createClass(spec);
