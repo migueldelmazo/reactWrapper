@@ -5,13 +5,17 @@ import AddressesStore from '../stores/Addresses';
 
 var View = React.createClass({
 
-  _displayName: 'addresses',
+  _displayName: __filename,
 
-  _atom: [
+  atomListener: [
     {
-      atom: AddressesStore.atom.address,
+      atom: AddressesStore.atomAttr.address,
       actions: [
-        { action: 'updState', attr: 'address', fn: AddressesStore.foo }
+        {
+          action: 'updState',
+          attr: 'address',
+          fn: AddressesStore.foo
+        }
       ]
     }
   ],
@@ -23,7 +27,7 @@ var View = React.createClass({
   _render () {
     return (
       <ul>
-        <li>Address: {this.atomGet(AddressesStore.atom.address)}</li>
+        <li>Address: {this.atomGet(AddressesStore.atomAttr.address)}</li>
         <li>Address: {this.state.address}</li>
         <li>Price: {this.state.price}</li>
         <li>User: {this.state.user}</li>
@@ -32,4 +36,4 @@ var View = React.createClass({
   }
 });
 
-export default View
+export default View;
