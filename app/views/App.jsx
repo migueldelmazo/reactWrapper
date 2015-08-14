@@ -5,7 +5,7 @@ import AddressesView from './Addresses.jsx';
 
 export default React.createClass({
 
-  _displayName: 'App',
+  _displayName: __filename,
 
   _render () {
     return (
