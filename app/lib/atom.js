@@ -4,8 +4,6 @@ import _ from 'lodash';
 
 var atom = {},
 
-  contexts = [],
-
   // on change
 
   changedAttrs = [],
@@ -33,7 +31,9 @@ var atom = {},
 
   filterChangedItems = function (context, attrs) {
     return _.filter(context.atomListener, function (item) {
-      return attrs.indexOf(item.atom) >= 0;
+      return _.find(item.atom, function (itemAttr) {
+        return attrs.indexOf(itemAttr) >= 0;
+      });
     });
   },
 
@@ -61,12 +61,26 @@ var atom = {},
   getActionFn = function (action) {
     var fn = this[action.action];
     return _.isFunction(fn) ? fn : undefined;
+  },
+
+  // contexts
+
+  contexts = [],
+
+  parseListeners = function (context) {
+    _.each(context.atomListener, function (item) {
+      if (!_.isArray(item.atom)) {
+        item.atom = [item.atom];
+      }
+    });
+
   };
 
 module.exports = {
 
   on (context) {
     if (context.atomListener) {
+      parseListeners(context);
       contexts.push(context);
     }
   },
