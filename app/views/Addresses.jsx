@@ -1,7 +1,7 @@
 'use strict';
 
 import React from 'react';
-import AddressesStore from '../stores/Addresses';
+import AddressesStore from '../stores/addresses';
 
 var View = React.createClass({
 

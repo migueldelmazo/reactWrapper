@@ -1,7 +1,7 @@
 'use strict';
 
 import React from 'react';
-import AddressesView from './Addresses.jsx';
+import AddressesView from './addresses.jsx';
 
 export default React.createClass({
 
