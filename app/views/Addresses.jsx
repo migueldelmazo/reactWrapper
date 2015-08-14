@@ -2,10 +2,15 @@
 
 import React from 'react';
 import AddressesStore from '../stores/addresses';
+import Router from '../lib/router';
 
 var View = React.createClass({
 
   displayName: __filename,
+
+  componentWillMount () {
+    AddressesStore.receiveAddresses();
+  },
 
   atomListener: [
     {
@@ -31,16 +36,15 @@ var View = React.createClass({
     },
     {
       atom: AddressesStore.atomAttr.country
+    },
+    {
+      atom: Router.atomAttr.mainName
     }
   ],
 
   initialState: {
     address: 'Empty street',
     city: 'Empty city'
-  },
-
-  componentWillMount () {
-    AddressesStore.receiveAddresses();
   },
 
   render () {
