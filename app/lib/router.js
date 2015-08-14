@@ -18,7 +18,8 @@ var
   getHash = function () {
     var hash = window.location.hash.replace('#', ''),
       queryPosition = hash.indexOf('?');
-    return queryPosition >= 0 ? hash.substr(0, queryPosition) : hash;
+    hash = queryPosition >= 0 ? hash.substr(0, queryPosition) : hash;
+    return hash.substr(-1) === '/' ? hash.substr(0, hash.length - 1) : hash;
   },
 
   // routes
@@ -52,18 +53,20 @@ var
     return result;
   },
 
-  REGEX_PATH = new RegExp(/:[a-z]+/g),
-
   getMatchedRouteInfo = function (route, match) {
-    var values = _.rest(match),
-      keys = route.path.match(REGEX_PATH);
-    keys = _.map(keys, function (key) {
-      return key.substr(1);
-    });
     return {
-      values: _.zipObject(keys, values),
+      values: _.zipObject(getPathKeys(route.path), _.rest(match)),
       name: route.name
     };
+  },
+
+  REGEX_PATH_KEYS = new RegExp(/:[a-z]+/g),
+
+  getPathKeys = function (path) {
+    var keys = path.match(REGEX_PATH_KEYS);
+    return _.map(keys, function (key) {
+      return key.substr(1);
+    });
   },
 
   // atom
@@ -75,18 +78,52 @@ var
 
   updateAtom = function () {
     var mainRoute = getMatchRoutes().pop();
+    console.log(mainRoute);
     Atom.set(atomAttr.mainName, mainRoute.name);
     Atom.set(atomAttr.mainValues, mainRoute.values);
+  },
+
+  // getters
+
+  getRoute = function (name, query) {
+    var route = _.find(routes, { name: name }),
+      pathKeys,
+      queryKeys,
+      isValidQuery;
+    if (route) {
+      pathKeys = getPathKeys(route.path);
+      queryKeys = _.keys(query);
+      isValidQuery = !_.size(_.difference(pathKeys, queryKeys));
+      return isValidQuery ? route : null;
+    }
+  },
+
+  getParsedPath = function (route, query) {
+    var path = route.path,
+      pathKeys = getPathKeys(route.path);
+    _.each(pathKeys, function (key) {
+      path = path.replace(':' + key, query[key]);
+    });
+    return path;
   };
 
 module.exports = {
 
   atomAttr: atomAttr,
 
-  init: function (appRoutes) {
+  init (appRoutes) {
     initRoutes(appRoutes);
     listenLocationChanges();
     updateAtom();
+  },
+
+  go (name, query) {
+    var route = getRoute(name, query);
+    if (route) {
+      window.location.hash = getParsedPath(route, query);
+    }
   }
 
 };
+
+window.route = module.exports;
