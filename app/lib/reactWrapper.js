@@ -4,7 +4,9 @@ import _ from 'lodash';
 import React from 'react';
 import Atom from './atom';
 
-var // state
+var
+
+  // state
 
   wrapSetStateFn = function () {
     this.setState = _.wrap(this.setState, function (setStateFn, key, value) {
@@ -15,7 +17,7 @@ var // state
   // utils
 
   analytics = function (msg) {
-    console.log(this._displayName + ':', msg);
+    console.debug(this._displayName + ':', msg);
   },
 
   parseToObj = function (key, value) {

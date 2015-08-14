@@ -32,8 +32,8 @@ var atom = {},
   }, 10),
 
   filterChangedItems = function (context, attrs) {
-    return _.filter(context._atom, function (item) {
-      return true;
+    return _.filter(context.atomListener, function (item) {
+      return attrs.indexOf(item.atom) >= 0;
     });
   },
 
@@ -66,14 +66,14 @@ var atom = {},
 module.exports = {
 
   on (context) {
-    if (context._atom) {
+    if (context.atomListener) {
       contexts.push(context);
     }
   },
 
   off (context) {
     var index;
-    if (context._atom) {
+    if (context.atomListener) {
       index = contexts.indexOf(context);
       if (index >= 0) {
         contexts.splice(index, 1);
