@@ -5,32 +5,53 @@ import AddressesStore from '../stores/Addresses';
 
 var View = React.createClass({
 
-  _displayName: __filename,
+  displayName: __filename,
 
   atomListener: [
     {
       atom: AddressesStore.atomAttr.address,
       actions: [
         {
-          action: 'updState',
-          attr: 'address',
-          fn: AddressesStore.foo
+          action: 'storeToState',
+          stateAttr: 'address',
+          method: AddressesStore.getAddress,
+          store: AddressesStore
         }
       ]
+    },
+    {
+      atom: AddressesStore.atomAttr.city,
+      actions: [
+        {
+          action: 'atomToState',
+          stateAttr: 'city',
+          atomAttr: AddressesStore.atomAttr.city
+        }
+      ]
+    },
+    {
+      atom: AddressesStore.atomAttr.country
     }
   ],
 
-  _componentWillMount () {
+  initialState: {
+    address: 'Empty street',
+    city: 'Empty city'
+  },
+
+  componentWillMount () {
     AddressesStore.receiveAddresses();
   },
 
-  _render () {
+  render () {
     return (
       <ul>
-        <li>Address: {this.atomGet(AddressesStore.atomAttr.address)}</li>
-        <li>Address: {this.state.address}</li>
-        <li>Price: {this.state.price}</li>
-        <li>User: {this.state.user}</li>
+        <li>Address (from Atom): {this.atomGet(AddressesStore.atomAttr.address)}</li>
+        <li>Address (from State): {this.state.address}</li>
+        <li>Address (from Store): {AddressesStore.getAddress()}</li>
+        <li>City (from Atom): {this.atomGet(AddressesStore.atomAttr.city)}</li>
+        <li>City (from State): {this.state.city}</li>
+        <li>Country (from Atom): {this.atomGet(AddressesStore.atomAttr.country)}</li>
       </ul>
     );
   }

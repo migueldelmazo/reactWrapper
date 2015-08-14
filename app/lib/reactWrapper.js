@@ -35,12 +35,20 @@ React._createClass = React.createClass;
 
 React.createClass = function (spec) {
 
+  // display name
+
+  spec._displayName = spec.displayName;
+
   // wrappers
+
+  spec._componentWillMount = spec.componentWillMount;
 
   spec.componentWillMount = function () {
     Atom.on(this);
     _.result(this, '_componentWillMount');
   };
+
+  spec._componentWillUnmount = spec.componentWillUnmount;
 
   spec.componentWillUnmount = function () {
     Atom.off(this);
@@ -55,6 +63,8 @@ React.createClass = function (spec) {
 
   // render
 
+  spec._render = spec.render;
+
   spec.render = function () {
     analytics.call(this, 'render');
     return this._render();
@@ -64,7 +74,7 @@ React.createClass = function (spec) {
 
   spec.getInitialState = function () {
     wrapSetStateFn.call(this);
-    return this._state || {};
+    return this.initialState || {};
   };
 
   // atom
@@ -79,8 +89,12 @@ React.createClass = function (spec) {
 
   // actions
 
-  spec.updState = function (action) {
-    this.setState(action.attr, action.fn.call(action.ctx));
+  spec.storeToState = function (action) {
+    this.setState(action.stateAttr, action.method.call(action.store));
+  };
+
+  spec.atomToState = function (action) {
+    this.setState(action.stateAttr, this.atomGet(action.atomAttr));
   };
 
   return React._createClass(spec);

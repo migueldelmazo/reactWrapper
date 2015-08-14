@@ -4,9 +4,8 @@ import StoreClass from '../lib/store';
 
 var atomAttr = {
     address: 'address',
-    payment: 'payment',
-    price: 'foo.price',
-    user: 'user'
+    city: 'city',
+    country: 'country'
   };
 
 export default StoreClass.create({
@@ -31,14 +30,13 @@ export default StoreClass.create({
   receiveAddresses () {
     setTimeout(function () {
       this.setAtom(this.atomAttr.address, 'My street');
-      this.setAtom(this.atomAttr.payment, 'Visa');
-      this.setAtom(this.atomAttr.price, 'Price');
-      this.setAtom(this.atomAttr.user, 'Miguel');
+      this.setAtom(this.atomAttr.city, 'Madrid');
+      this.setAtom(this.atomAttr.country, 'Spain');
     }.bind(this), 1000);
   },
 
-  foo () {
-    return 1234;
+  getAddress () {
+    return this.getAtom(this.atomAttr.address);
   }
 
 });

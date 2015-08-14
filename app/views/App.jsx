@@ -5,9 +5,9 @@ import AddressesView from './Addresses.jsx';
 
 export default React.createClass({
 
-  _displayName: __filename,
+  displayName: __filename,
 
-  _render () {
+  render () {
     return (
       <div>
         <AddressesView />
