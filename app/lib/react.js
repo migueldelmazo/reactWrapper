@@ -9,15 +9,15 @@ var
   // state
 
   wrapSetStateMethod = function () {
-    this.setState = _.wrap(this.setState, function (setStateFn, key, value) {
-      setStateFn.call(this, parseToObj(key, value));
+    this.setState = _.wrap(this.setState, function (setStateMethod, key, value) {
+      setStateMethod.call(this, parseToObj(key, value));
     });
   },
 
   // utils
 
   analytics = function (msg) {
-    console.debug(this._displayName + ':', msg);
+    console.debug(this._displayName + ':', msg, this.state);
   },
 
   parseToObj = function (key, value) {
