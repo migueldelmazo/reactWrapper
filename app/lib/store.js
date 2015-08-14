@@ -4,7 +4,7 @@ import _ from 'lodash';
 import Atom from './atom';
 
 var StoreClass = function (options) {
-    _.extend(this, options);
+    _.assign(this, options);
     Atom.on(this);
   };
 

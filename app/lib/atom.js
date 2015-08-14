@@ -4,7 +4,7 @@ import _ from 'lodash';
 
 var atom = {},
 
-  // on change
+  // on change attributes
 
   changedAttrs = [],
 
@@ -18,7 +18,7 @@ var atom = {},
     return _changedAttrs;
   },
 
-  // trigger
+  // trigger changes
 
   triggerDebounced = _.debounce(function () {
     var attrs = getChangedAttrs();
@@ -67,7 +67,7 @@ var atom = {},
 
   contexts = [],
 
-  parseListeners = function (context) {
+  parseContextListeners = function (context) {
     _.each(context.atomListener, function (item) {
       if (!_.isArray(item.atom)) {
         item.atom = [item.atom];
@@ -80,7 +80,7 @@ module.exports = {
 
   on (context) {
     if (context.atomListener) {
-      parseListeners(context);
+      parseContextListeners(context);
       contexts.push(context);
     }
   },

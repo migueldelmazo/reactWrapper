@@ -8,7 +8,7 @@ var
 
   // state
 
-  wrapSetStateFn = function () {
+  wrapSetStateMethod = function () {
     this.setState = _.wrap(this.setState, function (setStateFn, key, value) {
       setStateFn.call(this, parseToObj(key, value));
     });
@@ -39,7 +39,7 @@ React.createClass = function (spec) {
 
   spec._displayName = spec.displayName;
 
-  // wrappers
+  // react wrappers methods
 
   spec._componentWillMount = spec.componentWillMount;
 
@@ -73,7 +73,7 @@ React.createClass = function (spec) {
   // state
 
   spec.getInitialState = function () {
-    wrapSetStateFn.call(this);
+    wrapSetStateMethod.call(this);
     return this.initialState || {};
   };
 

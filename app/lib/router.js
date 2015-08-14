@@ -7,7 +7,7 @@ var
 
   // hash
 
-  listenLocation = function () {
+  listenLocationChanges = function () {
     window.addEventListener('hashchange', onHashChange, true);
   },
 
@@ -17,18 +17,18 @@ var
 
   getHash = function () {
     var hash = window.location.hash.replace('#', ''),
-      questionPosition = hash.indexOf('?');
-    return questionPosition >= 0 ? hash.substr(0, questionPosition) : hash;
+      queryPosition = hash.indexOf('?');
+    return queryPosition >= 0 ? hash.substr(0, queryPosition) : hash;
   },
 
   // routes
 
   routes = [],
 
-  initRoutes = function (rawRoutes, parentRoute) {
-    parentRoute = parentRoute || '';
+  initRoutes = function (rawRoutes, parentPath) {
+    parentPath = parentPath || '';
     _.each(rawRoutes, function (route) {
-      var path = (parentRoute + '/' + route.path).replace('//', '/');
+      var path = (parentPath + '/' + route.path).replace('//', '/');
       routes.push({
         path: path,
         name: route.name
@@ -37,7 +37,9 @@ var
     });
   },
 
-  getMathRoutes = function () {
+  // matched routes
+
+  getMatchRoutes = function () {
     var hash = '/' + getHash(),
       result = [];
     _.each(routes, function (route) {
@@ -72,7 +74,7 @@ var
   },
 
   updateAtom = function () {
-    var mainRoute = getMathRoutes().pop();
+    var mainRoute = getMatchRoutes().pop();
     Atom.set(atomAttr.mainName, mainRoute.name);
     Atom.set(atomAttr.mainValues, mainRoute.values);
   };
@@ -83,7 +85,7 @@ module.exports = {
 
   init: function (appRoutes) {
     initRoutes(appRoutes);
-    listenLocation();
+    listenLocationChanges();
     updateAtom();
   }
 
