@@ -51,11 +51,18 @@ gulp.task('watch', function() {
   gulp.watch('app/**/*.jsx', ['lint', 'browserify']);
   gulp.watch('app/**/*.js', ['lint', 'browserify']);
   gulp.watch('html/**/*', ['copy-html']);
+  gulp.watch('css/**/*', ['copy-css']);
 });
 
 gulp.task('copy-html', function() {
   return gulp.src('./html/**/*.html')
     .pipe(gulp.dest(DEV))
+    .pipe(reload({stream: true}));
+});
+
+gulp.task('copy-css', function() {
+  return gulp.src('./css/**/*.css')
+    .pipe(gulp.dest(DEV + '/css/'))
     .pipe(reload({stream: true}));
 });
 
@@ -76,5 +83,5 @@ gulp.task('browser-sync', function() {
 });
 
 gulp.task('default', ['clean'], function() {
-  runSequence(['lint', 'deps', 'browserify', 'copy-html'], 'browser-sync', 'watch');
+  runSequence(['lint', 'deps', 'browserify', 'copy-html', 'copy-css'], 'browser-sync', 'watch');
 });

@@ -1,7 +1,9 @@
 'use strict';
 
 import React from 'react';
-import AddressesView from './addresses.jsx';
+import HeaderView from './header.jsx';
+import ContentView from './content.jsx';
+import FooterView from './footer.jsx';
 
 export default React.createClass({
 
@@ -10,7 +12,9 @@ export default React.createClass({
   render () {
     return (
       <div>
-        <AddressesView />
+        <HeaderView />
+        <ContentView />
+        <FooterView />
       </div>
     );
   }

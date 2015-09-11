@@ -1,0 +1,18 @@
+body {
+  background: #eee;
+}
+
+body div.mdl-grid {
+  max-width: 100%;
+  padding: 0;
+}
+
+.mdl-cell {
+  transition: width .5s;
+}
+
+.block {
+  padding: 10px;
+  background: #fff;
+  box-shadow: 0 0 5px rgba(0,0,0,0.1);
+}

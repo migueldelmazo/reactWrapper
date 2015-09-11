@@ -5,7 +5,8 @@
   "main": "",
   "dependencies": {
     "lodash": "*",
-    "react": "*"
+    "react": "*",
+    "material-design-lite": "~1.0.4-2"
   },
   "devDependencies": {
     "babelify": "^5.0.3",
