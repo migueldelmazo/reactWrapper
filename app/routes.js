@@ -11,7 +11,13 @@ export default [
         subRoute: [
           {
             name: 'addressAdd',
-            path: 'add'
+            path: 'add',
+            subRoute: [
+              {
+                name: 'addressAddAll',
+                path: 'addAll'
+              }
+            ]
           },
           {
             name: 'addressUser',
