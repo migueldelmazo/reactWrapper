@@ -23,11 +23,7 @@ var
   },
 
   ensureHash = function (hash) {
-    hash = '/' + hash + '/';
-    while (hash.indexOf('//') >= 0) {
-      hash = hash.replace(/\/\//g, '/');
-    }
-    return hash;
+    return ('/' + hash + '/').replace(/\/+/g, '/');
   },
 
   // routes
