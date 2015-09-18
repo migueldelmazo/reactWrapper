@@ -1,14 +1,21 @@
 'use strict';
 
 import React from 'react';
-import FormUtils from '../lib/form';
+import FormMixin from '../lib/form';
+import ValidationsMixin from '../lib/validations';
 import ArticlesStore from '../stores/articles';
 
 export default React.createClass({
 
   displayName: __filename,
 
-  mixins: [FormUtils],
+  mixins: [FormMixin, ValidationsMixin],
+
+  atomListener: [
+    {
+      atom: [ArticlesStore.atomAttr.newArticleTitle]
+    }
+  ],
 
   submitForm () {
   },
@@ -20,15 +27,29 @@ export default React.createClass({
         <form onSubmit={this.onSubmitForm}>
           <label>
             <span>Title:</span>
-            {this.getInputText({
-              fn: ArticlesStore.setTitle,
+
+            {this.renderInputText({
+              trigger: {
+                fn: ArticlesStore.storeNewArticle,
+                ctx: ArticlesStore,
+                key: ArticlesStore.atomAttr.newArticleTitle
+              },
+              value: this.atomGet(ArticlesStore.atomAttr.newArticleTitle),
               placeholder: 'title'
             })}
-            {this.getInputText({
-              fn: ArticlesStore.setTitle,
-              key: 'subtitle',
+
+            {this.renderValidation(ArticlesStore.validations.newArticleTitle)}
+
+            {this.renderInputText({
+              trigger: {
+                fn: ArticlesStore.storeNewArticle,
+                ctx: ArticlesStore,
+                key: ArticlesStore.atomAttr.newArticleSubtitle
+              },
+              value: this.atomGet(ArticlesStore.atomAttr.newArticleSubtitle),
               placeholder: 'subtitle'
             })}
+
           </label>
           <label>
             <span>Body:</span>

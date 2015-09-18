@@ -5,24 +5,34 @@ import React from 'react';
 
 var
 
-  // on change
+  // triggers
 
-  ON_CHANGE_DEBOUNCE_TIME = 1000,
-
-  changes = {},
-
-  onChangeItem = function (reactId, options) {
-    changes[reactId] = options;
-    onChangeDebounced();
+  triggerChanges = function () {
+    _.each(resetChanges(), triggerChange);
   },
 
-  onChangeDebounced = _.debounce(function () {
-    _.each(resetChanges(), function (change) {
-      if (_.isFunction(change.fn)) {
-        change.fn(onChangeGetFnArgument(change));
-      }
-    });
-  }, ON_CHANGE_DEBOUNCE_TIME),
+  triggerChange = function (change) {
+    triggerChangeParseArray(change);
+    _.each(change.trigger, triggerChangeRunMethods.bind(null, change));
+  },
+
+  triggerChangeParseArray = function (change) {
+    if (!_.isArray(change.trigger)) {
+      change.trigger = [change.trigger];
+    }
+  },
+
+  triggerChangeRunMethods = function (change, trigger) {
+    if (trigger && _.isFunction(trigger.fn)) {
+      trigger.fn.call(trigger.ctx || change.view, change.val, trigger);
+    }
+  },
+
+  // changes
+
+  ON_CHANGE_DEBOUNCE_TIME = 500,
+
+  changes = {},
 
   resetChanges = function () {
     var _changes = changes;
@@ -30,37 +40,31 @@ var
     return _changes;
   },
 
-  onChangeGetFnArgument = function (change) {
-    var result = {};
-    if (change.key) {
-      result[change.key] = change.val;
-    } else {
-      result = change.val;
-    }
-    return result;
+  onChangeItem = function (reactId, val, trigger, view) {
+    changes[reactId] = { trigger, val, view };
+    onChangeDebounced();
   },
 
-  // input text
+  onChangeDebounced = _.debounce(triggerChanges, ON_CHANGE_DEBOUNCE_TIME),
 
-  onChangeInputText = function (options, ev) {
-    onChangeItem(ev.target.dataset.reactid, {
-      fn: options.fn,
-      key: options.key,
-      val: ev.target.value
-    });
+  // render helpers: renderInputText
+
+  onChangeInputText = function (trigger, ev) {
+    onChangeItem(ev.target.dataset.reactid, ev.target.value, trigger, this);
   };
 
 export default {
 
   // input text
 
-  getInputText (options) {
+  renderInputText (options) {
     options = options || {};
     return (
       <input
-        type='text'
+        type={_.get(options, 'type', 'text')}
+        defaultValue={_.get(options, 'value', '')}
         placeholder={_.get(options, 'placeholder')}
-        onChange={onChangeInputText.bind(this, options)} />
+        onChange={onChangeInputText.bind(this, options.trigger)} />
     );
   },
 
@@ -74,6 +78,7 @@ export default {
   // helpers
 
   stopEvent (ev) {
+    // TODO: mover a otro sitio
     if (ev) {
       ev.nativeEvent.preventDefault();
       ev.nativeEvent.stopPropagation();
