@@ -23,6 +23,7 @@ var
   },
 
   ensureHash = function (hash) {
+    // remove repeated slash
     return ('/' + hash + '/').replace(/\/+/g, '/');
   },
 
@@ -48,8 +49,10 @@ var
   getMatchedRoutes = function (hash) {
     var matchedRoutes = [],
       lastMatchedPath = '';
+    hash = ensureHash(hash);
     _.each(treeRoutes, function (route) {
       var match = getMatchedRoutesRegex(route.path, hash);
+      // check if current route matches and is the son of the previous route
       if (match && route.path.indexOf(lastMatchedPath) >= 0) {
         lastMatchedPath = route.path;
         matchedRoutes.push(getMatchedRouteData(route.name, match));
@@ -82,13 +85,12 @@ var
   // helpers
 
   getRouteByName = function (name) {
-    return _.find(treeRoutes, { name: name }) || NOT_FOUND_ROUTE;
+    return _.find(treeRoutes, { name: name });
   },
 
   getRouteUrl = function (name, values) {
-    var path = getRouteByName(name).path,
-      pathKeys = getRouteKeys(name);
-    _.each(pathKeys, function (key) {
+    var path = getRouteByName(name).path;
+    _.each(getRouteKeys(name), function (key) {
       path = path.replace(':' + key, values[key]);
     });
     return path;
@@ -97,21 +99,15 @@ var
   REGEX_PATH_KEYS = new RegExp(/:[a-z]+/g),
 
   getRouteKeys = function (name) {
-    var path = getRouteByName(name).path,
-      keys = path.match(REGEX_PATH_KEYS);
-    return _.map(keys, function (key) {
+    var path = getRouteByName(name).path;
+    return _.map(path.match(REGEX_PATH_KEYS), function (key) {
       return key.substr(1);
     });
   },
 
   isValidRoute = function (name, values) {
-    var route = getRouteByName(name),
-      pathKeys,
-      valuesKeys;
-    if (route) {
-      pathKeys = getRouteKeys(name);
-      valuesKeys = _.keys(values);
-      return !_.size(_.difference(pathKeys, valuesKeys));
+    if (getRouteByName(name)) {
+      return !_.size(_.difference(getRouteKeys(name), _.keys(values)));
     }
   },
 
@@ -154,6 +150,10 @@ module.exports = {
     if (isValidRoute(name, values)) {
       return '#' + getRouteUrl(name, values);
     }
+  },
+
+  getMatchedRoutes (hash) {
+    return getMatchedRoutes(hash);
   }
 
 };
