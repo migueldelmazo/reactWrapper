@@ -8,10 +8,8 @@ var atomAttr = {
 
 export default StoreClass.create({
 
-  atomAttr: atomAttr,
+  atomAttr,
 
-  setTitle (value) {
-    console.log(value);
-  }
+  setTitle () {}
 
 });

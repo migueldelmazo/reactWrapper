@@ -14,22 +14,15 @@ export default React.createClass({
     }
   ],
 
-  render () {
-    return (
-      <div className='mdl-grid test'>
-        <div className='mdl-cell mdl-cell--12-col block'>
-          <h4>Test</h4>
-          {this.getRoutes()}
-        </div>
-      </div>
-    );
-  },
-
   // render helpers
 
   getRoutes () {
     var routes = _.map(this.atomGet(RouterStore.atomAttr.routes), function (route) {
-      return (<li>{route.name} {JSON.stringify(route.values)}</li>);
+      return (
+        <li key={route.name}>
+          {route.name} {JSON.stringify(route.values)}
+        </li>
+      );
     });
     return (
       <div>
@@ -37,6 +30,17 @@ export default React.createClass({
         <ul>
           {routes}
         </ul>
+      </div>
+    );
+  },
+
+  render () {
+    return (
+      <div className='mdl-grid test'>
+        <div className='mdl-cell mdl-cell--12-col block'>
+          <h4>Test</h4>
+          {this.getRoutes()}
+        </div>
       </div>
     );
   }

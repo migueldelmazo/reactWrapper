@@ -5,6 +5,7 @@ import Atom from './atom';
 
 var StoreClass = function (options) {
     _.assign(this, options);
+    _.result(this, 'init');
     Atom.on(this);
   };
 
@@ -18,7 +19,7 @@ StoreClass.prototype.setAtom = function (attr, value) {
 
 module.exports = {
 
-  create: function (options) {
+  create (options) {
     return new StoreClass(options);
   }
 

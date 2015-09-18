@@ -2,7 +2,6 @@
 
 import React from 'react';
 import KeyRouter from 'KeyRouter';
-import RouterStore from '../stores/router';
 
 export default React.createClass({
 

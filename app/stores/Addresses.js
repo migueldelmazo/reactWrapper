@@ -10,7 +10,7 @@ var atomAttr = {
 
 export default StoreClass.create({
 
-  atomAttr: atomAttr,
+  atomAttr,
 
   atomListener: [
     {
@@ -23,8 +23,8 @@ export default StoreClass.create({
     }
   ],
 
-  onAddressChange: function () {
-    console.log(this.getAtom(atomAttr.address));
+  onAddressChange () {
+    // console.log(this.getAtom(atomAttr.address));
   },
 
   receiveAddresses () {

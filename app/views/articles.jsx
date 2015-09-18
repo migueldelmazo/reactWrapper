@@ -8,17 +8,20 @@ export default React.createClass({
 
   initialState: { col: 4 },
 
+  // DOM events
+
+  onClickFoo () {
+    this.setState({ col: (this.state.col + 1) % 5 });
+    this.forceUpdate();
+  },
+
+  // render
+
   render () {
-    console.log(this.state.col);
     return (
       <div className={'mdl-cell mdl-cell--' + (this.state.col + 1) + '-col block'} onClick={this.onClickFoo}>
         <h4>Articles: {this.props.text}</h4>
       </div>
     );
-  },
-
-  onClickFoo () {
-    this.setState({ col: (this.state.col + 1) % 5 });
-    this.forceUpdate();
   }
 });
