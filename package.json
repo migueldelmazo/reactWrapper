@@ -4,6 +4,7 @@
   "description": "",
   "main": "",
   "dependencies": {
+    "keyRouter": "git://github.com/migueldelmazo/KeyRouter.git",
     "lodash": "*",
     "react": "*",
     "material-design-lite": "~1.0.4-2"

@@ -4,6 +4,7 @@ import React from 'react';
 import HeaderView from './header.jsx';
 import ContentView from './content.jsx';
 import FooterView from './footer.jsx';
+import TestView from './test.jsx';
 
 export default React.createClass({
 
@@ -15,6 +16,7 @@ export default React.createClass({
         <HeaderView />
         <ContentView />
         <FooterView />
+        <TestView />
       </div>
     );
   }

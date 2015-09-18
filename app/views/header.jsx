@@ -1,7 +1,8 @@
 'use strict';
 
 import React from 'react';
-import Router from '../lib/router';
+import KeyRouter from 'KeyRouter';
+import RouterStore from '../stores/router';
 
 export default React.createClass({
 
@@ -17,25 +18,25 @@ export default React.createClass({
           <h4>Navigation</h4>
           <ul className='nav'>
             <li>
-              <a href={Router.getUrl('index')}>index</a>
+              <a href={KeyRouter.getUrl('index')}>index</a>
             </li>
             <li>
-              <a href={Router.getUrl('addresses')}>addresses</a>
+              <a href={KeyRouter.getUrl('addresses')}>addresses</a>
             </li>
             <li>
-              <a href={Router.getUrl('addressAdd')}>addressAdd</a>
+              <a href={KeyRouter.getUrl('addressAdd')}>addressAdd</a>
             </li>
             <li>
-              <a href={Router.getUrl('addressAddAll')}>addressAddAll</a>
+              <a href={KeyRouter.getUrl('addressAddAll')}>addressAddAll</a>
             </li>
             <li>
-              <a href={Router.getUrl('addressUser', { user: 123 })}>addressUser</a>
+              <a href={KeyRouter.getUrl('addressUser', { user: 123 })}>addressUser</a>
             </li>
             <li>
-              <a href={Router.getUrl('addressId', { user: 123, id: 321 })}>addressId</a>
+              <a href={KeyRouter.getUrl('addressId', { user: 123, id: 321 })}>addressId</a>
             </li>
             <li>
-              <a href={Router.getUrl('payments')}>payments</a>
+              <a href={KeyRouter.getUrl('payments')}>payments</a>
             </li>
           </ul>
         </div>
@@ -48,4 +49,5 @@ export default React.createClass({
       </div>
     );
   }
+
 });
