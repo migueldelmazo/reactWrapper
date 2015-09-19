@@ -5,6 +5,7 @@
 import _ from 'lodash';
 import React from 'react';
 import Atom from './atom';
+import Util from './util';
 
 var
 
@@ -12,7 +13,7 @@ var
 
   wrapSetStateMethod = function () {
     this.setState = _.wrap(this.setState, function (setStateMethod, key, value) {
-      setStateMethod.call(this, parseToObj(key, value));
+      setStateMethod.call(this, Util.parseToObj(key, value));
     });
   },
 
@@ -20,16 +21,6 @@ var
 
   analytics = function (msg) {
     console.debug(this._displayName + ':', msg, this.state);
-  },
-
-  parseToObj = function (key, value) {
-    var obj = {};
-    if (_.isPlainObject(key)) {
-      obj = key;
-    } else {
-      _.set(obj, key, value);
-    }
-    return obj;
   };
 
 // wrap React.createClass
