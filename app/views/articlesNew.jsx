@@ -13,7 +13,7 @@ export default React.createClass({
 
   atomListener: [
     {
-      atom: [ArticlesStore.atomAttr.newArticleTitle]
+      atom: [ArticlesStore.atomAttr.newArticleTitle, ArticlesStore.atomAttr.newArticleSubtitle, ArticlesStore.atomAttr.newArticleBody]
     }
   ],
 
@@ -26,34 +26,34 @@ export default React.createClass({
         <h4>New article</h4>
         <form onSubmit={this.onSubmitForm}>
           <label>
-            <span>Title:</span>
 
             {this.renderInputText({
               trigger: {
                 fn: ArticlesStore.storeNewArticle,
-                ctx: ArticlesStore,
                 key: ArticlesStore.atomAttr.newArticleTitle
               },
               value: this.atomGet(ArticlesStore.atomAttr.newArticleTitle),
               placeholder: 'title'
             })}
 
-            {this.renderValidation(ArticlesStore.validations.newArticleTitle)}
-
             {this.renderInputText({
               trigger: {
                 fn: ArticlesStore.storeNewArticle,
-                ctx: ArticlesStore,
                 key: ArticlesStore.atomAttr.newArticleSubtitle
               },
               value: this.atomGet(ArticlesStore.atomAttr.newArticleSubtitle),
               placeholder: 'subtitle'
             })}
 
-          </label>
-          <label>
-            <span>Body:</span>
-            <textarea />
+            {this.renderTextarea({
+              trigger: {
+                fn: ArticlesStore.storeNewArticle,
+                key: ArticlesStore.atomAttr.newArticleBody
+              },
+              value: this.atomGet(ArticlesStore.atomAttr.newArticleBody),
+              placeholder: 'body'
+            })}
+
           </label>
           <button type='submit' className="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">Send</button>
         </form>

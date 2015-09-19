@@ -24,7 +24,7 @@ var
 
   triggerChangeRunMethods = function (change, trigger) {
     if (trigger && _.isFunction(trigger.fn)) {
-      trigger.fn.call(trigger.ctx || change.view, change.val, trigger);
+      trigger.fn(change.val, trigger);
     }
   },
 
@@ -51,6 +51,12 @@ var
 
   onChangeInputText = function (trigger, ev) {
     onChangeItem(ev.target.dataset.reactid, ev.target.value, trigger, this);
+  },
+
+  // render helpers: renderTextarea
+
+  onChangeTextarea = function (trigger, ev) {
+    onChangeItem(ev.target.dataset.reactid, ev.target.value, trigger, this);
   };
 
 export default {
@@ -65,6 +71,18 @@ export default {
         defaultValue={_.get(options, 'value', '')}
         placeholder={_.get(options, 'placeholder')}
         onChange={onChangeInputText.bind(this, options.trigger)} />
+    );
+  },
+
+  // input text
+
+  renderTextarea (options) {
+    options = options || {};
+    return (
+      <textarea
+        defaultValue={_.get(options, 'value', '')}
+        placeholder={_.get(options, 'placeholder')}
+        onChange={onChangeTextarea.bind(this, options.trigger)} />
     );
   },
 
