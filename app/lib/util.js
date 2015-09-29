@@ -2,6 +2,21 @@
 
 import _ from 'lodash';
 
+var
+
+  // lodash mixins
+
+  parseArray = function (arr = []) {
+    return _.isArray(arr) ? arr : [arr];
+  },
+
+  resultWithArgs = function (obj, path) {
+    var result = _.get(obj, path);
+    return _.isFunction(result) ? result.apply(obj, _.slice(arguments, 2)) : result;
+  };
+
+_.mixin({ parseArray, resultWithArgs });
+
 export default {
 
   // regex
@@ -16,7 +31,7 @@ export default {
 
   // helpers
 
-  parseToObj: function (key, value) {
+  parseToObj (key, value) {
     var obj = {};
     if (_.isPlainObject(key)) {
       obj = key;

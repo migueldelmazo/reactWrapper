@@ -51,7 +51,7 @@ export default React.createClass({
               val: this.state.title,
               placeholder: 'Title'
             })}
-            {this.renderValidation('title')}
+            {this.validationRender('title')}
 
             {this.formRenderText({
               key: 'subtitle',

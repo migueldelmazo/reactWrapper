@@ -7,6 +7,7 @@ var
 
   onChangeItem = function (key, val) {
     this.setState(key, val);
+    _.resultWithArgs(this, 'validationAddChangedField', key);
   },
 
   onChangeTextField = function (options, ev) {
@@ -15,6 +16,10 @@ var
 
   onClickSubmit = function (options, ev) {
     this.formOnSubmit(ev);
+  },
+
+  isValidForm = function () {
+    return this.validationIsValidForm ? this.validationIsValidForm() : true;
   };
 
 export default {
@@ -51,6 +56,7 @@ export default {
     return (
       <button
         type='submit'
+        disabled={!isValidForm.call(this)}
         className="mdl-button mdl-js-button mdl-button--raised mdl-button--colored"
         onClick={onClickSubmit.bind(this, options)}>
         {_.get(options, 'val', '')}
@@ -62,7 +68,9 @@ export default {
 
   formOnSubmit (ev) {
     this.stopEvent(ev);
-    _.result(this, 'submitForm');
+    if (isValidForm.bind(this)) {
+      _.result(this, 'submitForm');
+    }
   },
 
   // helpers
