@@ -77,7 +77,7 @@ React.createClass = function (spec) {
 
   spec.getInitialState = function () {
     wrapSetStateMethod.call(this);
-    return this.initialState || {};
+    return _.result(this, 'initialState') || null;
   };
 
   // atom
@@ -93,7 +93,7 @@ React.createClass = function (spec) {
   // actions
 
   spec.storeToState = function (action) {
-    this.setState(action.stateAttr, action.method.call(action.store));
+    this.setState(action.stateAttr, action.method());
   };
 
   spec.atomToState = function (action) {
@@ -101,6 +101,14 @@ React.createClass = function (spec) {
   };
 
   return React._createClass(spec);
+};
+
+React.initApp = function (view, el) {
+  // wait to start the atom
+  setTimeout(function () {
+    React.render(view, el || document.body);
+  }, 0);
+
 };
 
 module.exports = React;
