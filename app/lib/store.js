@@ -4,15 +4,11 @@ import _ from 'lodash';
 import Atom from './atom';
 
 var StoreClass = function (options) {
-    parseOptions.call(this, options);
+    _.assign(this, options);
+    _.bindAll(this);
     _.result(this, 'init');
+    _.result(this, 'atomInit');
     Atom.on(this);
-  },
-
-  parseOptions = function (options) {
-    _.each(options, function (val, key) {
-      this[key] = (_.isFunction(val)) ? val.bind(this) : val;
-    }, this);
   };
 
 StoreClass.prototype.getAtom = function (attr) {
@@ -21,6 +17,13 @@ StoreClass.prototype.getAtom = function (attr) {
 
 StoreClass.prototype.setAtom = function (attr, value) {
   return Atom.set(attr, value);
+};
+
+StoreClass.prototype.apiNew = function (options) {
+  setTimeout(function () {
+    Atom.add(options.onOkSetAtom, options.data);
+    // Atom.set('articles.new', {});
+  }, 500);
 };
 
 module.exports = {

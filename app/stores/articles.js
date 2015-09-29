@@ -4,14 +4,22 @@ import StoreClass from '../lib/store';
 import Util from '../lib/util';
 
 var atomAttr = {
+    newArticle: 'articles.new',
     newArticleTitle: 'articles.new.title',
     newArticleSubtitle: 'articles.new.subtitle',
-    newArticleBody: 'articles.new.body'
+    newArticleBody: 'articles.new.body',
+    articlesList: 'articles.list'
   };
 
 export default StoreClass.create({
 
+  // atom
+
   atomAttr,
+
+  atomInit: [
+    [ atomAttr.articlesList, [] ]
+  ],
 
   validations: {
     newArticleTitle: {
@@ -21,8 +29,16 @@ export default StoreClass.create({
     }
   },
 
-  storeNewArticle (val, options) {
+  setNewArticleFields (val, options) {
     this.setAtom(options.key, val);
+  },
+
+  createNewArticle () {
+    this.apiNew({
+      url: 'url',
+      data: this.getAtom(atomAttr.newArticle),
+      onOkSetAtom: atomAttr.articlesList
+    });
   }
 
 });
