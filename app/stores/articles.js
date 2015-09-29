@@ -1,14 +1,14 @@
 'use strict';
 
 import StoreClass from '../lib/store';
-import Util from '../lib/util';
 
 var atomAttr = {
     newArticle: 'articles.new',
     newArticleTitle: 'articles.new.title',
     newArticleSubtitle: 'articles.new.subtitle',
     newArticleBody: 'articles.new.body',
-    articlesList: 'articles.list'
+    articlesList: 'articles.list',
+    articlesIndex: 'articles.index'
   };
 
 export default StoreClass.create({
@@ -18,19 +18,21 @@ export default StoreClass.create({
   atomAttr,
 
   atomInitial: [
-    [ atomAttr.articlesList, [] ]
+    [atomAttr.articlesList, []],
+    [atomAttr.articlesIndex, 0]
   ],
-
-  validations: {
-    newArticleTitle: {
-      atomAttr: atomAttr.newArticleTitle,
-      regex: Util.regex.isNotEmpty,
-      msg: 'epic fail'
-    }
-  },
 
   setNewArticleFields (val, options) {
     this.setAtom(options.key, val);
+  },
+
+  createNewArticle (data) {
+    console.log(data);
+  },
+
+  incArticlesIndex () {
+    var articlesIndex = this.getAtom(atomAttr.articlesIndex);
+    this.setAtom(atomAttr.articlesIndex, articlesIndex + 1);
   }
 
 });

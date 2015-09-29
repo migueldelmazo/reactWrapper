@@ -71,16 +71,6 @@ export default {
     if (isValidForm.bind(this)) {
       _.result(this, 'submitForm');
     }
-  },
-
-  // helpers
-
-  stopEvent (ev) {
-    // TODO: mover a otro sitio
-    if (ev) {
-      ev.nativeEvent.preventDefault();
-      ev.nativeEvent.stopPropagation();
-    }
   }
 
 };

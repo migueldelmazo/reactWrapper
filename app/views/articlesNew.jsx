@@ -1,5 +1,6 @@
 'use strict';
 
+import _ from 'lodash';
 import React from 'react';
 import Util from '../lib/util';
 import FormMixin from '../lib/form';
@@ -18,7 +19,8 @@ export default React.createClass({
         ArticlesStore.atomAttr.newArticleTitle,
         ArticlesStore.atomAttr.newArticleSubtitle,
         ArticlesStore.atomAttr.newArticleBody,
-        ArticlesStore.atomAttr.newArticle
+        ArticlesStore.atomAttr.newArticle,
+        ArticlesStore.atomAttr.articlesIndex
       ]
     }
   ],
@@ -28,7 +30,7 @@ export default React.createClass({
   },
 
   submitForm () {
-    ArticlesStore.createNewArticle();
+    ArticlesStore.createNewArticle(_.pick(this.state, ['title', 'subtitle', 'body']));
   },
 
   validations: {
@@ -70,6 +72,12 @@ export default React.createClass({
             val: 'Send'
           })}
         </form>
+
+        <p onClick={this.onEv(ArticlesStore.incArticlesIndex)}>
+          Incr:
+          {this.atomGet(ArticlesStore.atomAttr.articlesIndex)}
+        </p>
+
       </div>
     );
   }

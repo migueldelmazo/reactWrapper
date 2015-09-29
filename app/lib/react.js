@@ -5,7 +5,6 @@
 import _ from 'lodash';
 import React from 'react';
 import Atom from './atom';
-import Util from './util';
 
 var
 
@@ -13,9 +12,10 @@ var
 
   wrapSetStateMethod = function () {
     this.setState = _.wrap(this.setState, function (setStateMethod, key, val) {
-      var newState = _.extend({}, this.state, Util.parseToObj(key, val));
+      var obj = _.parseToObj(key, val),
+        newState = _.extend({}, this.state, obj);
       if (!_.isEqual(this.state, newState)) {
-        setStateMethod.call(this, Util.parseToObj(key, val));
+        setStateMethod.call(this, obj);
         onSetState.call(this, key);
       }
     });
@@ -98,6 +98,25 @@ React.createClass = function (spec) {
 
   spec.atomToState = function (action) {
     this.setState(action.stateAttr, this.atomGet(action.atomAttr));
+  };
+
+  // events
+
+  spec.onEv = function (listener) {
+    var args = _.slice(arguments, 1);
+    return function (ev) {
+      var dontStopEvent = listener.apply(this, args.concat(ev));
+      if (dontStopEvent !== true) {
+        this.stopEvent(ev);
+      }
+    }.bind(this);
+  };
+
+  spec.stopEvent = function (ev) {
+    if (ev) {
+      ev.nativeEvent.preventDefault();
+      ev.nativeEvent.stopPropagation();
+    }
   };
 
   return React._createClass(spec);
