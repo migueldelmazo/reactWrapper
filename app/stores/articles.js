@@ -17,7 +17,7 @@ export default StoreClass.create({
 
   atomAttr,
 
-  atomInit: [
+  atomInitial: [
     [ atomAttr.articlesList, [] ]
   ],
 

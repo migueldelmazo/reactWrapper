@@ -73,12 +73,24 @@ var atom = {},
   contexts = [],
 
   parseContextListeners = function (context) {
-    _.each(context.atomListener, function (item) {
-      if (!_.isArray(item.atom)) {
-        item.atom = [item.atom];
-      }
-    });
+    if (context.atomListener) {
+      _.each(context.atomListener, function (item) {
+        if (!_.isArray(item.atom)) {
+          item.atom = [item.atom];
+        }
+      });
+      contexts.push(context);
+    }
+  },
 
+  // initial data
+
+  setInitialData = function (context) {
+    if (context.atomInitial) {
+      _.each(context.atomInitial, function (item) {
+        module.exports.set(item[0], item[1]);
+      });
+    }
   };
 
 module.exports = {
@@ -86,10 +98,8 @@ module.exports = {
   // listeners
 
   on (context) {
-    if (context.atomListener) {
-      parseContextListeners(context);
-      contexts.push(context);
-    }
+    parseContextListeners(context);
+    setInitialData(context);
   },
 
   off (context) {

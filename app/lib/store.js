@@ -7,7 +7,6 @@ var StoreClass = function (options) {
     _.assign(this, options);
     _.bindAll(this);
     _.result(this, 'init');
-    _.result(this, 'atomInit');
     Atom.on(this);
   };
 
