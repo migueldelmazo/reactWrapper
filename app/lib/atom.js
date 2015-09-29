@@ -8,7 +8,10 @@ var atom = {},
 
   changedAttrs = [],
 
-  addChangedAttr = function (attr) {
+  addChangedAttr = function (attr, options) {
+    if (options && options.silent) {
+      return;
+    }
     changedAttrs.push(attr);
     triggerDebounced();
   },
@@ -99,37 +102,72 @@ module.exports = {
     }
   },
 
-  // get/set...
+  // get/set values
 
-  get (attr) {
-    return _.get(atom, attr);
+  has (attr) {
+    return _.has(atom, attr);
   },
 
-  set (attr, value) {
+  get (attr, defaultValue) {
+    return _.get(atom, attr, defaultValue);
+  },
+
+  set (attr, value, options) {
     if (!_.isEqual(_.get(atom, attr), value)) {
       _.set(atom, attr, value);
-      addChangedAttr(attr);
+      addChangedAttr(attr, options);
     }
   },
 
-  add (attr, value) {
+  del (attr, options) {
+    _.set(atom, attr, undefined);
+    addChangedAttr(attr);
+  },
+
+  // get/set collections
+
+  pop (attr, options) {
+    var arr = _.get(atom, attr),
+      result;
+    if (_.isArray(arr)) {
+      result = arr.push(value);
+      addChangedAttr(attr, options);
+    }
+    return result;
+  },
+
+  push (attr, value, options) {
     var arr = _.get(atom, attr);
     if (_.isArray(arr)) {
       arr.push(value);
-      addChangedAttr(attr);
+      addChangedAttr(attr, options);
     }
   },
 
-  reset (attr, arr) {
+  concat (attr, value, options) {
+    var arr = _.get(atom, attr);
     if (_.isArray(arr)) {
-      _.set(atom, attr, arr);
-      addChangedAttr(attr);
+      arr.concat(value);
+      addChangedAttr(attr, options);
     }
   },
 
-  del (attr) {
-    _.set(atom, attr, undefined);
-    addChangedAttr(attr);
+  reset (attr, value, options) {
+    if (value === undefined) {
+      value = [];
+    } else if (_.isArray(value)) {
+      value = [value];
+    }
+    _.set(attr, value);
+    addChangedAttr(attr, options);
+  },
+
+  at (attr, index) {
+    return _.get(_.get(atom, attr), '[' + index + ']');
+  },
+
+  size (attr) {
+    return _.size(_.get(atom, attr));
   }
 
 };
