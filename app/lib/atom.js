@@ -121,7 +121,7 @@ module.exports = {
 
   del (attr, options) {
     _.set(atom, attr, undefined);
-    addChangedAttr(attr);
+    addChangedAttr(attr, options);
   },
 
   // get/set collections
@@ -130,7 +130,7 @@ module.exports = {
     var arr = _.get(atom, attr),
       result;
     if (_.isArray(arr)) {
-      result = arr.push(value);
+      result = arr.pop();
       addChangedAttr(attr, options);
     }
     return result;
