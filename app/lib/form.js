@@ -5,56 +5,15 @@ import React from 'react';
 
 var
 
-  // triggers
-
-  triggerChanges = function () {
-    _.each(resetChanges(), triggerChange);
+  onChangeItem = function (key, val) {
+    this.setState(key, val);
   },
-
-  triggerChange = function (change) {
-    triggerChangeParseArray(change);
-    _.each(change.trigger, triggerChangeRunMethods.bind(null, change));
-  },
-
-  triggerChangeParseArray = function (change) {
-    if (!_.isArray(change.trigger)) {
-      change.trigger = [change.trigger];
-    }
-  },
-
-  triggerChangeRunMethods = function (change, trigger) {
-    if (trigger && _.isFunction(trigger.fn)) {
-      trigger.fn(change.val, trigger);
-    }
-  },
-
-  // changes
-
-  ON_CHANGE_DEBOUNCE_TIME = 500,
-
-  changes = {},
-
-  resetChanges = function () {
-    var _changes = changes;
-    changes = {};
-    return _changes;
-  },
-
-  onChangeItem = function (reactId, val, trigger) {
-    changes[reactId] = { trigger, val };
-    onChangeDebounced();
-  },
-
-  onChangeDebounced = _.debounce(triggerChanges, ON_CHANGE_DEBOUNCE_TIME),
-
-  // render input helpers
 
   onChangeTextField = function (options, ev) {
-    onChangeItem(ev.target.dataset.reactid, ev.target.value, options.trigger);
+    onChangeItem.call(this, options.key, ev.target.value);
   },
 
   onClickSubmit = function (options, ev) {
-    triggerChange({ trigger: options.trigger });
     this.onSubmitForm(ev);
   };
 
@@ -67,8 +26,8 @@ export default {
     return (
       <input
         type={_.get(options, 'type', 'text')}
-        defaultValue={_.get(options, 'val', '')}
-        placeholder={_.get(options, 'placeholder')}
+        value={_.get(options, 'val', '')}
+        placeholder={_.get(options, 'placeholder', '')}
         onChange={onChangeTextField.bind(this, options)} />
     );
   },

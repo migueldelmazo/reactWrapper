@@ -27,7 +27,7 @@ export default React.createClass({
   },
 
   render () {
-    window.vista=this;
+    window.vista = this;
     return (
       <div className='mdl-cell mdl-cell--2-col block'>
         <h4>New article</h4>
@@ -35,30 +35,21 @@ export default React.createClass({
           <label>
 
             {this.renderInputText({
-              trigger: {
-                fn: ArticlesStore.setNewArticleFields,
-                key: ArticlesStore.atomAttr.newArticleTitle
-              },
-              val: this.atomGet(ArticlesStore.atomAttr.newArticleTitle),
-              placeholder: 'title'
+              key: 'title',
+              val: this.state.title,
+              placeholder: 'Title'
             })}
 
             {this.renderInputText({
-              trigger: {
-                fn: ArticlesStore.setNewArticleFields,
-                key: ArticlesStore.atomAttr.newArticleSubtitle
-              },
-              val: this.atomGet(ArticlesStore.atomAttr.newArticleSubtitle),
-              placeholder: 'subtitle'
+              key: 'subtitle',
+              val: this.state.subtitle,
+              placeholder: 'Subtitle'
             })}
 
             {this.renderTextarea({
-              trigger: {
-                fn: ArticlesStore.setNewArticleFields,
-                key: ArticlesStore.atomAttr.newArticleBody
-              },
-              val: this.atomGet(ArticlesStore.atomAttr.newArticleBody),
-              placeholder: 'body'
+              key: 'body',
+              val: this.state.body,
+              placeholder: 'Body'
             })}
 
           </label>
