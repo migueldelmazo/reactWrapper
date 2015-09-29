@@ -14,14 +14,14 @@ var
   },
 
   onClickSubmit = function (options, ev) {
-    this.onSubmitForm(ev);
+    this.formOnSubmit(ev);
   };
 
 export default {
 
   // input text
 
-  renderInputText (options) {
+  formRenderText (options) {
     options = options || {};
     return (
       <input
@@ -34,7 +34,7 @@ export default {
 
   // input text
 
-  renderTextarea (options) {
+  formRenderTextarea (options) {
     options = options || {};
     return (
       <textarea
@@ -46,7 +46,7 @@ export default {
 
   // input submit
 
-  renderSubmit (options) {
+  formRenderSubmit (options) {
     options = options || {};
     return (
       <button
@@ -60,7 +60,7 @@ export default {
 
   // DOM events
 
-  onSubmitForm (ev) {
+  formOnSubmit (ev) {
     this.stopEvent(ev);
     _.result(this, 'submitForm');
   },

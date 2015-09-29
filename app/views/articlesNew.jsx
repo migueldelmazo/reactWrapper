@@ -1,6 +1,7 @@
 'use strict';
 
 import React from 'react';
+import Util from '../lib/util';
 import FormMixin from '../lib/form';
 import ValidationsMixin from '../lib/validations';
 import ArticlesStore from '../stores/articles';
@@ -22,8 +23,19 @@ export default React.createClass({
     }
   ],
 
+  initialState: {
+    title: ''
+  },
+
   submitForm () {
     ArticlesStore.createNewArticle();
+  },
+
+  validations: {
+    title: {
+      regex: Util.regex.isNotEmpty,
+      msg: 'epic fail'
+    }
   },
 
   render () {
@@ -31,29 +43,30 @@ export default React.createClass({
     return (
       <div className='mdl-cell mdl-cell--2-col block'>
         <h4>New article</h4>
-        <form onSubmit={this.onSubmitForm}>
+        <form onSubmit={this.formOnSubmit}>
           <label>
 
-            {this.renderInputText({
+            {this.formRenderText({
               key: 'title',
               val: this.state.title,
               placeholder: 'Title'
             })}
+            {this.renderValidation('title')}
 
-            {this.renderInputText({
+            {this.formRenderText({
               key: 'subtitle',
               val: this.state.subtitle,
               placeholder: 'Subtitle'
             })}
 
-            {this.renderTextarea({
+            {this.formRenderTextarea({
               key: 'body',
               val: this.state.body,
               placeholder: 'Body'
             })}
 
           </label>
-          {this.renderSubmit({
+          {this.formRenderSubmit({
             val: 'Send'
           })}
         </form>
