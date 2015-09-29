@@ -10,11 +10,13 @@ var atom = {},
 
   addChangedAttr = function (attr) {
     changedAttrs.push(attr);
+    triggerDebounced();
   },
 
   getChangedAttrs = function () {
     var _changedAttrs = _.uniq(changedAttrs);
     changedAttrs = [];
+    console.log('atom attrs changed', _changedAttrs);
     return _changedAttrs;
   },
 
@@ -78,6 +80,8 @@ var atom = {},
 
 module.exports = {
 
+  // listeners
+
   on (context) {
     if (context.atomListener) {
       parseContextListeners(context);
@@ -95,17 +99,39 @@ module.exports = {
     }
   },
 
+  // get/set...
+
+  get (attr) {
+    return _.get(atom, attr);
+  },
+
   set (attr, value) {
     if (!_.isEqual(_.get(atom, attr), value)) {
       _.set(atom, attr, value);
       addChangedAttr(attr);
-      triggerDebounced();
     }
   },
 
-  get (attr) {
-    return _.get(atom, attr);
+  add (attr, value) {
+    var arr = _.get(atom, attr);
+    if (_.isArray(arr)) {
+      arr.push(value);
+      addChangedAttr(attr);
+    }
+  },
+
+  reset (attr, arr) {
+    if (_.isArray(arr)) {
+      _.set(atom, attr, arr);
+      addChangedAttr(attr);
+    }
+  },
+
+  del (attr) {
+    _.set(atom, attr, undefined);
+    addChangedAttr(attr);
   }
+
 };
 
 window.atom = atom;
