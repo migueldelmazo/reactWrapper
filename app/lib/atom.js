@@ -19,7 +19,6 @@ var atom = {},
   getChangedAttrs = function () {
     var _changedAttrs = _.uniq(changedAttrs);
     changedAttrs = [];
-    console.log('atom attrs changed', _changedAttrs);
     return _changedAttrs;
   },
 
@@ -27,11 +26,13 @@ var atom = {},
 
   triggerDebounced = _.debounce(function () {
     var attrs = getChangedAttrs();
+    console.group('atom attrs changed', attrs);
     _.each(contexts, function (context) {
       var changedItems = filterChangedItems(context, attrs);
       runItemActions(context, changedItems);
       triggerChangedItems(context, changedItems);
     });
+    console.groupEnd();
   }, 10),
 
   filterChangedItems = function (context, attrs) {
