@@ -19,13 +19,6 @@ StoreClass.prototype.setAtom = function (attr, value) {
   return Atom.set(attr, value);
 };
 
-StoreClass.prototype.apiNew = function (options) {
-  setTimeout(function () {
-    Atom.add(options.onOkSetAtom, options.data);
-    // Atom.set('articles.new', {});
-  }, 500);
-};
-
 module.exports = {
 
   create (options) {

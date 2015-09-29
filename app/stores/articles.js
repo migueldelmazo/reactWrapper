@@ -31,14 +31,6 @@ export default StoreClass.create({
 
   setNewArticleFields (val, options) {
     this.setAtom(options.key, val);
-  },
-
-  createNewArticle () {
-    this.apiNew({
-      url: 'url',
-      data: this.getAtom(atomAttr.newArticle),
-      onOkSetAtom: atomAttr.articlesList
-    });
   }
 
 });
