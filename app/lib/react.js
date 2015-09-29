@@ -12,9 +12,19 @@ var
   // state
 
   wrapSetStateMethod = function () {
-    this.setState = _.wrap(this.setState, function (setStateMethod, key, value) {
-      setStateMethod.call(this, Util.parseToObj(key, value));
+    this.setState = _.wrap(this.setState, function (setStateMethod, key, val) {
+      var newState = _.extend({}, this.state, Util.parseToObj(key, val));
+      if (!_.isEqual(this.state, newState)) {
+        setStateMethod.call(this, Util.parseToObj(key, val));
+        onSetState.call(this, key);
+      }
     });
+  },
+
+  onSetState = function (key) {
+    if (_.isString(key) && _.isFunction(_.get(this, 'onSetState[' + key + ']'))) {
+      this.onSetState[key].call(this);
+    }
   },
 
   // utils
@@ -50,8 +60,8 @@ React.createClass = function (spec) {
 
   // shouldComponentUpdate
 
-  spec.shouldComponentUpdate = function (props) {
-    return !_.isEqual(this.props, props);
+  spec.shouldComponentUpdate = function (props, state) {
+    return !_.isEqual(this.props, props) || !_.isEqual(this.state, state);
   };
 
   // render
