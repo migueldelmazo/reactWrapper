@@ -40,23 +40,22 @@ var
     return _changes;
   },
 
-  onChangeItem = function (reactId, val, trigger, view) {
-    changes[reactId] = { trigger, val, view };
+  onChangeItem = function (reactId, val, trigger) {
+    changes[reactId] = { trigger, val };
     onChangeDebounced();
   },
 
   onChangeDebounced = _.debounce(triggerChanges, ON_CHANGE_DEBOUNCE_TIME),
 
-  // render helpers: renderInputText
+  // render input helpers
 
-  onChangeInputText = function (trigger, ev) {
-    onChangeItem(ev.target.dataset.reactid, ev.target.value, trigger, this);
+  onChangeTextField = function (options, ev) {
+    onChangeItem(ev.target.dataset.reactid, ev.target.value, options.trigger);
   },
 
-  // render helpers: renderTextarea
-
-  onChangeTextarea = function (trigger, ev) {
-    onChangeItem(ev.target.dataset.reactid, ev.target.value, trigger, this);
+  onClickSubmit = function (options, ev) {
+    triggerChange({ trigger: options.trigger });
+    this.onSubmitForm(ev);
   };
 
 export default {
@@ -68,9 +67,9 @@ export default {
     return (
       <input
         type={_.get(options, 'type', 'text')}
-        defaultValue={_.get(options, 'value', '')}
+        defaultValue={_.get(options, 'val', '')}
         placeholder={_.get(options, 'placeholder')}
-        onChange={onChangeInputText.bind(this, options.trigger)} />
+        onChange={onChangeTextField.bind(this, options)} />
     );
   },
 
@@ -80,9 +79,23 @@ export default {
     options = options || {};
     return (
       <textarea
-        defaultValue={_.get(options, 'value', '')}
+        defaultValue={_.get(options, 'val', '')}
         placeholder={_.get(options, 'placeholder')}
-        onChange={onChangeTextarea.bind(this, options.trigger)} />
+        onChange={onChangeTextField.bind(this, options)} />
+    );
+  },
+
+  // input submit
+
+  renderSubmit (options) {
+    options = options || {};
+    return (
+      <button
+        type='submit'
+        className="mdl-button mdl-js-button mdl-button--raised mdl-button--colored"
+        onClick={onClickSubmit.bind(this, options)}>
+        {_.get(options, 'val', '')}
+      </button>
     );
   },
 

@@ -13,14 +13,21 @@ export default React.createClass({
 
   atomListener: [
     {
-      atom: [ArticlesStore.atomAttr.newArticleTitle, ArticlesStore.atomAttr.newArticleSubtitle, ArticlesStore.atomAttr.newArticleBody]
+      atom: [
+        ArticlesStore.atomAttr.newArticleTitle,
+        ArticlesStore.atomAttr.newArticleSubtitle,
+        ArticlesStore.atomAttr.newArticleBody,
+        ArticlesStore.atomAttr.newArticle
+      ]
     }
   ],
 
   submitForm () {
+    ArticlesStore.createNewArticle();
   },
 
   render () {
+    window.vista=this;
     return (
       <div className='mdl-cell mdl-cell--2-col block'>
         <h4>New article</h4>
@@ -29,33 +36,35 @@ export default React.createClass({
 
             {this.renderInputText({
               trigger: {
-                fn: ArticlesStore.storeNewArticle,
+                fn: ArticlesStore.setNewArticleFields,
                 key: ArticlesStore.atomAttr.newArticleTitle
               },
-              value: this.atomGet(ArticlesStore.atomAttr.newArticleTitle),
+              val: this.atomGet(ArticlesStore.atomAttr.newArticleTitle),
               placeholder: 'title'
             })}
 
             {this.renderInputText({
               trigger: {
-                fn: ArticlesStore.storeNewArticle,
+                fn: ArticlesStore.setNewArticleFields,
                 key: ArticlesStore.atomAttr.newArticleSubtitle
               },
-              value: this.atomGet(ArticlesStore.atomAttr.newArticleSubtitle),
+              val: this.atomGet(ArticlesStore.atomAttr.newArticleSubtitle),
               placeholder: 'subtitle'
             })}
 
             {this.renderTextarea({
               trigger: {
-                fn: ArticlesStore.storeNewArticle,
+                fn: ArticlesStore.setNewArticleFields,
                 key: ArticlesStore.atomAttr.newArticleBody
               },
-              value: this.atomGet(ArticlesStore.atomAttr.newArticleBody),
+              val: this.atomGet(ArticlesStore.atomAttr.newArticleBody),
               placeholder: 'body'
             })}
 
           </label>
-          <button type='submit' className="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">Send</button>
+          {this.renderSubmit({
+            val: 'Send'
+          })}
         </form>
       </div>
     );
