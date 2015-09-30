@@ -174,7 +174,7 @@ module.exports = {
   },
 
   at (attr, index) {
-    return _.get(_.get(atom, attr), '[' + index + ']');
+    return _.get(_.get(atom, attr), index);
   },
 
   size (attr) {

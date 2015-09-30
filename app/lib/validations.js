@@ -42,7 +42,7 @@ var
 
   renderLiError = function (validation) {
     return (
-      <li>{validation.msg}</li>
+      <li key={validation.msg}>{validation.msg}</li>
     );
   },
 

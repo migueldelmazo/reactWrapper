@@ -57,7 +57,7 @@ export default {
       <button
         type='submit'
         disabled={!isValidForm.call(this)}
-        className="mdl-button mdl-js-button mdl-button--raised mdl-button--colored"
+        className='mdl-button mdl-js-button mdl-button--raised mdl-button--colored'
         onClick={onClickSubmit.bind(this, options)}>
         {_.get(options, 'val', '')}
       </button>
