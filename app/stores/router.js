@@ -12,9 +12,9 @@ var atomAttr = {
 
   updateAtom = function (routes) {
     var currentRouter = _.last(routes);
-    this.setAtom(atomAttr.routes, routes);
-    this.setAtom(atomAttr.currentName, currentRouter.name);
-    this.setAtom(atomAttr.currentValues, currentRouter.values);
+    this.atomSet(atomAttr.routes, routes);
+    this.atomSet(atomAttr.currentName, currentRouter.name);
+    this.atomSet(atomAttr.currentValues, currentRouter.values);
   },
 
   appRoutes = [

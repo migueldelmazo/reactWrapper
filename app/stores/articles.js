@@ -22,17 +22,13 @@ export default StoreClass.create({
     [atomAttr.articlesIndex, 0]
   ],
 
-  setNewArticleFields (val, options) {
-    this.setAtom(options.key, val);
-  },
-
   createNewArticle (data) {
     console.log(data);
   },
 
   incArticlesIndex () {
-    var articlesIndex = this.getAtom(atomAttr.articlesIndex);
-    this.setAtom(atomAttr.articlesIndex, articlesIndex + 1);
+    var articlesIndex = this.atomGet(atomAttr.articlesIndex);
+    this.atomSet(atomAttr.articlesIndex, articlesIndex + 1);
   }
 
 });

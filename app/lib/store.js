@@ -10,13 +10,8 @@ var StoreClass = function (options) {
     Atom.on(this);
   };
 
-StoreClass.prototype.getAtom = function (attr) {
-  return Atom.get(attr);
-};
-
-StoreClass.prototype.setAtom = function (attr, value) {
-  return Atom.set(attr, value);
-};
+StoreClass.prototype.atomGet = Atom.get;
+StoreClass.prototype.atomSet = Atom.set;
 
 module.exports = {
 
