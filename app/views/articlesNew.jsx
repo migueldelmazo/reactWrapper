@@ -26,7 +26,8 @@ export default React.createClass({
   ],
 
   initialState: {
-    title: ''
+    title: '',
+    subtitle: ''
   },
 
   submitForm () {
@@ -36,7 +37,15 @@ export default React.createClass({
   validations: {
     title: {
       regex: Util.regex.isNotEmpty,
-      msg: 'epic fail'
+      msg: 'epic fail',
+      wrapperClassName: 'lolo',
+      itemClassName: 'item'
+    },
+    subtitle: {
+      regex: Util.regex.isNotEmpty,
+      msg: 'epic fail',
+      wrapperClassName: 'lolo',
+      itemClassName: 'item'
     }
   },
 
@@ -60,6 +69,7 @@ export default React.createClass({
               val: this.state.subtitle,
               placeholder: 'Subtitle'
             })}
+            {this.validationRender('subtitle')}
 
             {this.formRenderTextarea({
               key: 'body',

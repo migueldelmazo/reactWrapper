@@ -26,7 +26,7 @@ var
       case 0:
         return null;
       case 1:
-        return renderParragraphError(validations[0]);
+        return renderParragraphError(validations);
       default:
         return renderUlError(validations);
     }
@@ -34,22 +34,37 @@ var
 
   renderUlError = function (validations) {
     return (
-      <ul className='validation'>
+      <ul className={getWrapperClassName(validations)}>
         {_.map(validations, renderLiError)}
       </ul>
     );
   },
 
-  renderLiError = function (validation) {
+  renderLiError = function (validation, idx) {
     return (
-      <li key={validation.msg}>{validation.msg}</li>
+      <li key={idx} className={getItemClassName(validation)}>{validation.msg}</li>
     );
   },
 
-  renderParragraphError = function (validation) {
+  renderParragraphError = function (validations) {
     return (
-      <p className='validation'>{validation.msg}</p>
+      <div className={getWrapperClassName(validations)}>
+        <p className={getItemClassName(validations[0])}>{validations[0].msg}</p>
+      </div>
     );
+  },
+
+  // className
+
+  getWrapperClassName = function (validations) {
+    return _.reduce(validations, function (memo, validation) {
+      memo += validation.wrapperClassName ? ' ' + validation.wrapperClassName : '';
+      return memo;
+    }, 'validation');
+  },
+
+  getItemClassName = function (validation) {
+    return validation.itemClassName || null;
   };
 
 export default {
@@ -77,7 +92,7 @@ export default {
   },
 
   validationIsValidForm () {
-    return !!_.find(_.keys(this.validations), isValidField, this);
+    return !!_.every(_.keys(this.validations), isValidField, this);
   }
 
 };
