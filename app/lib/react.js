@@ -119,6 +119,16 @@ React.createClass = function (spec) {
     }
   };
 
+  // className
+
+  spec.cn = function (status, trueClass, falseClass, prefixClass, sufixClass) {
+    trueClass = trueClass || '';
+    falseClass = falseClass || '';
+    prefixClass = prefixClass === undefined ? '' : prefixClass;
+    sufixClass = sufixClass === undefined ? '' : sufixClass;
+    return prefixClass + (!!status ? trueClass : falseClass) + sufixClass;
+  };
+
   return React._createClass(spec);
 };
 
