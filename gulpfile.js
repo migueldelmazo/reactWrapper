@@ -52,6 +52,7 @@ gulp.task('watch', function() {
   gulp.watch('app/**/*.js', ['lint', 'browserify']);
   gulp.watch('html/**/*', ['copy-html']);
   gulp.watch('css/**/*', ['copy-css']);
+  gulp.watch('json/**/*', ['copy-json']);
 });
 
 gulp.task('copy-html', function() {
@@ -64,6 +65,11 @@ gulp.task('copy-css', function() {
   return gulp.src('./css/**/*.css')
     .pipe(gulp.dest(DEV + '/css/'))
     .pipe(reload({stream: true}));
+});
+
+gulp.task('copy-json', function() {
+  return gulp.src('./json/**/*.json')
+    .pipe(gulp.dest(DEV + '/json/'));
 });
 
 gulp.task('lint', function () {
@@ -83,5 +89,5 @@ gulp.task('browser-sync', function() {
 });
 
 gulp.task('default', ['clean'], function() {
-  runSequence(['lint', 'deps', 'browserify', 'copy-html', 'copy-css'], 'browser-sync', 'watch');
+  runSequence(['lint', 'deps', 'browserify', 'copy-html', 'copy-css', 'copy-json'], 'browser-sync', 'watch');
 });

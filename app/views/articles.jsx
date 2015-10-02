@@ -20,15 +20,14 @@ export default React.createClass({
 
   onClickFoo () {
     this.setState({ col: (this.state.col + 1) % 5 });
-    this.forceUpdate();
   },
 
   // render
 
   renderArticlesList () {
-    return _.map(this.atomGet(ArticlesStore.atomAttr.articlesList), function (article) {
+    return _.map(this.atomGet(ArticlesStore.atomAttr.articlesList), function (article, idx) {
       return (
-        <div>
+        <div key={idx}>
           <h4>{article.title}</h4>
           <h5>{article.subtitle}</h5>
           <p>{article.title}</p>

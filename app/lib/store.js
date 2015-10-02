@@ -1,6 +1,7 @@
 'use strict';
 
 import _ from 'lodash';
+import Api from './api';
 import Atom from './atom';
 
 var StoreClass = function (options) {
@@ -10,6 +11,7 @@ var StoreClass = function (options) {
     Atom.on(this);
   };
 
+StoreClass.prototype.apiSend = Api.apiSend;
 StoreClass.prototype.atomGet = Atom.get;
 StoreClass.prototype.atomSet = Atom.set;
 
