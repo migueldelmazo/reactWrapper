@@ -86,9 +86,7 @@ React.createClass = function (spec) {
     this.forceUpdate();
   };
 
-  spec.atomGet = function (attr) {
-    return Atom.get(attr);
-  };
+  spec.atomGet = Atom.get;
 
   // actions
 
@@ -126,7 +124,7 @@ React.createClass = function (spec) {
     falseClass = falseClass || '';
     prefixClass = prefixClass === undefined ? '' : prefixClass;
     sufixClass = sufixClass === undefined ? '' : sufixClass;
-    return prefixClass + (!!status ? trueClass : falseClass) + sufixClass;
+    return prefixClass + (status ? trueClass : falseClass) + sufixClass;
   };
 
   return React._createClass(spec);
