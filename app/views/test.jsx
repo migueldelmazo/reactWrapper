@@ -3,6 +3,7 @@
 import _ from 'lodash';
 import React from 'react';
 import RouterStore from '../stores/router';
+import ArtilcesStore from '../stores/articles';
 
 export default React.createClass({
 
@@ -10,7 +11,11 @@ export default React.createClass({
 
   atomListener: [
     {
-      atom: [RouterStore.atomAttr.currentName, RouterStore.atomAttr.currentValues]
+      atom: [
+        RouterStore.atomAttr.currentName,
+        RouterStore.atomAttr.currentValues,
+        ArtilcesStore.atomAttr.articlesApiSending
+      ]
     }
   ],
 
@@ -37,9 +42,13 @@ export default React.createClass({
   render () {
     return (
       <div className='mdl-grid test'>
-        <div className='mdl-cell mdl-cell--12-col block'>
+        <div className='mdl-cell mdl-cell--6-col block'>
           <h4>Test</h4>
           {this.getRoutes()}
+        </div>
+        <div className='mdl-cell mdl-cell--6-col block'>
+          <h4>API</h4>
+          {this.atomGet(ArtilcesStore.atomAttr.articlesApiSending, '').toString()}
         </div>
       </div>
     );

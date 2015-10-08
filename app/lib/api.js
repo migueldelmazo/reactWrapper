@@ -2,14 +2,24 @@
 
 import _ from 'lodash';
 import request from 'superagent';
-import Atom from './atom';
+import semantic from 'semantic';
 
 var
 
-  // url
+  // config
+
+  config = {},
 
   getUrl = function (options) {
-    return 'http://localhost:3000/json/' + options.url + '.json';
+    return (config.baseUrl || '') + options.url + '.json';
+  },
+
+  // parse options
+
+  parseOptions = function (options, ctx) {
+    options = options || {};
+    options.ctx = ctx;
+    options.method = options.method || 'GET';
   },
 
   // callbacks
@@ -20,74 +30,90 @@ var
     } else {
       onOk(options, res);
     }
-    toggleAtomState(options, false);
+    runMethod(config.onComplete, config.ctx, options, err, res);
   },
 
   onOk = function (options, res) {
-    setResData(options, res);
+    options.resData = _.get(res, 'body', {});
     if (checkAfterCalling(options)) {
       parseAfterCalling(options);
-      setAtom(options);
+      runMethod(config.onOk, config.ctx, options);
+      runMethod(options.onOk, options.ctx, options);
     }
   },
 
-  onKo = function (options, err) {},
-
-  setResData = function (options, res) {
-    options.resData = _.get(_.get(res, 'body'), options.resSufix);
-  },
-
-  // api: set the atom
-
-  toggleAtomState = function (options, state) {
-    if (options.atomState) {
-      Atom.set(options.atomState, state);
+  onKo = function (options, err) {
+    if (err.status === config.handledError) {
+      runMethod(options.onKo, options.ctx, options);
+    } else {
+      runMethod(config.onKo, config.ctx, options, err);
     }
   },
 
-  setAtom = function (options) {
-    if (options.atomAttr) {
-      Atom.set(options.atomAttr, options.resDataParsed);
-    }
-  },
-
-  // api: check and parse
+  // check and parse
 
   checkBeforeCalling = function (options) {
-    if (false) {
-      onKo(options, { errorCode: 'WRONG_REQUEST' });
-      return false;
-    } else {
-      return true;
-    }
+    return checkCalling(options, options.checkBeforeCalling, 'WRONG_REQUEST');
   },
 
   parseBeforeCalling = function (options) {
-    options.reqDataParsed = _.cloneDeep(options.reqData);
+    parseCalling(options, options.parseBeforeCalling, 'reqDataParsed');
   },
 
   checkAfterCalling = function (options) {
-    if (false) {
-      onKo(options, { errorCode: 'WRONG_RESPONSE' });
-      return false;
-    } else {
-      return true;
-    }
+    return checkCalling(options, options.checkAfterCalling, 'WRONG_RESPONSE');
   },
 
   parseAfterCalling = function (options) {
-    options.resDataParsed = _.cloneDeep(options.resData);
+    parseCalling(options, options.parseAfterCalling, 'resDataParsed');
+  },
+
+  checkCalling = function (options, foo, errorCode) {
+    var result = true;
+    if (_.isFunction(foo)) {
+      result = runMethod(foo, options.ctx, options);
+    } else if (_.isPlainObject(foo)) {
+      result = semantic.validate(options.resData, foo);
+    }
+    if (!result) {
+      onKo(options, { errorCode });
+    }
+    return result;
+  },
+
+  parseCalling = function (options, foo, target) {
+    if (_.isFunction(foo)) {
+      options[target] = runMethod(foo, options.ctx, options);
+    } else if (_.isPlainObject(foo)) {
+      options[target] = semantic.parse(options.resData, foo);
+    } else {
+      options[target] = _.cloneDeep(options.resData);
+    }
+  },
+
+  // helpers
+
+  runMethod = function (method, ctx) {
+    if (_.isFunction(method)) {
+      return method.apply(ctx, _.slice(arguments, 2));
+    }
   };
 
 module.exports = {
 
+  setConfig (_config) {
+    config = _config;
+  },
+
   apiSend (options) {
+    parseOptions(options, this);
     if (checkBeforeCalling(options)) {
       parseBeforeCalling(options);
-      request(options.method, getUrl(options))
-        .accept('application/json')
-        .query(options.reqDataParsed)
-        .end(onComplete.bind(this, options));
+      runMethod(config.onSend, config.ctx, options);
+      request(options.method, getUrl(options)).
+        accept('application/json').
+        query(options.reqDataParsed).
+        end(onComplete.bind(this, options));
     }
   }
 

@@ -1,5 +1,6 @@
 'use strict';
 
+require('./stores/api');
 require('./stores/router');
 
 import React from './lib/react';

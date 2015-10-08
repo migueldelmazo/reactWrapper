@@ -5,6 +5,7 @@
   "main": "",
   "dependencies": {
     "keyRouter": "git://github.com/migueldelmazo/KeyRouter.git",
+    "semantic": "git://github.com/migueldelmazo/semantic.git",
     "lodash": "*",
     "react": "*",
     "material-design-lite": "~1.0.4-2",

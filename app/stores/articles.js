@@ -23,9 +23,7 @@ export default StoreClass.create({
     [atomAttr.articlesIndex, 0]
   ],
 
-  createNewArticle (data) {
-    console.log(data);
-  },
+  createNewArticle (data) {},
 
   incArticlesIndex () {
     var articlesIndex = this.atomGet(atomAttr.articlesIndex);
@@ -33,30 +31,26 @@ export default StoreClass.create({
   },
 
   init () {
-    setTimeout(function () {
-      this.apiSend({
-        method: 'get',
-        url: 'articles',
-        reqData: {},
-        resSufix: 'articles',
-        atomAttr: atomAttr.articlesList,
-        atomState: atomAttr.articlesApiSending,
-        checkInReturn: {
-          'articles[].id': 'isId',
-          'articles[].title': ['isString', 'isNotEmpty'],
-          'articles[].subtitle': 'isString',
-          'articles[].body': 'isString'
-        },
-        parseInReturn: {
-          'articles[].id': 'parseId',
-          'articles[].title': 'parseString',
-          'articles[].subtitle': 'parseString',
-          'articles[].body': 'parseString'
-        },
-        onOk: function () {},
-        onKo: function () {}
-      });
-    }.bind(this), 250);
+    setTimeout(this.apiGetArticles.bind(this), 500);
+  },
+
+  apiGetArticles () {
+    this.apiSend({
+      method: 'get',
+      url: 'articles',
+      reqData: {},
+      atomPrefix: 'articles',
+      atomAttr: atomAttr.articlesList,
+      atomState: atomAttr.articlesApiSending,
+      checkAfterCalling: {
+        'articles[].title': ['isString', 'isNotEmpty']
+      },
+      parseAfterCalling: {
+        'articles[].id': 'parseString'
+      },
+      onOk () {},
+      onKo () {}
+    });
   }
 
 });
