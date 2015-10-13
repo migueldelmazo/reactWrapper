@@ -173,8 +173,8 @@ module.exports = {
     addChangedAttr(attr, options);
   },
 
-  at (attr, index) {
-    return _.get(atom, attr + '[' + index + ']');
+  at (attr, index, size) {
+    return _.at(_.get(atom, attr), index, size);
   },
 
   size (attr) {

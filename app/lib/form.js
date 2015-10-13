@@ -33,7 +33,7 @@ export default {
         type={_.get(options, 'type', 'text')}
         value={_.get(options, 'val', '')}
         placeholder={_.get(options, 'placeholder', '')}
-        onChange={onChangeTextField.bind(this, options)} />
+        onChange={this.onEv(onChangeTextField, options)} />
     );
   },
 
@@ -45,7 +45,7 @@ export default {
       <textarea
         defaultValue={_.get(options, 'val', '')}
         placeholder={_.get(options, 'placeholder')}
-        onChange={onChangeTextField.bind(this, options)} />
+        onChange={this.onEv(onChangeTextField, options)} />
     );
   },
 
@@ -55,10 +55,10 @@ export default {
     options = options || {};
     return (
       <button
-        type='submit'
+        type={_.get(options, 'type', 'submit')}
         disabled={!isValidForm.call(this)}
         className='mdl-button mdl-js-button mdl-button--raised mdl-button--colored'
-        onClick={onClickSubmit.bind(this, options)}>
+        onClick={this.onEv(onClickSubmit, options)}>
         {_.get(options, 'val', '')}
       </button>
     );
@@ -67,7 +67,7 @@ export default {
   // DOM events
 
   formOnSubmit (ev) {
-    this.stopEvent(ev);
+    _.result(this, 'validationAddAllFields');
     if (isValidForm.bind(this)) {
       _.result(this, 'submitForm');
     }

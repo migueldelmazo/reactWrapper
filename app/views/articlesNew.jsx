@@ -54,7 +54,7 @@ export default React.createClass({
     return (
       <div className='mdl-cell mdl-cell--2-col block'>
         <h4>New article</h4>
-        <form onSubmit={this.formOnSubmit}>
+        <form onSubmit={this.onEv(this.formOnSubmit)}>
           <label>
 
             {this.formRenderText({
