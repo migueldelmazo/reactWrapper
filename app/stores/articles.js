@@ -36,8 +36,8 @@ export default StoreClass.create({
 
   apiGetArticles () {
     this.apiSend({
-      method: 'get',
-      url: 'articles',
+      method: 'GET',
+      url: 'articles.json',
       reqData: {},
       atomPrefix: 'articles',
       atomAttr: atomAttr.articlesList,

@@ -11,7 +11,7 @@ var
   config = {},
 
   getUrl = function (options) {
-    return (config.baseUrl || '') + options.url + '.json';
+    return (config.baseUrl || '') + options.url;
   },
 
   // parse options
@@ -43,7 +43,7 @@ var
   },
 
   onKo = function (options, err) {
-    if (err.status === config.handledError) {
+    if (config.handledErrors.indexOf(err.status) >= 0) {
       runMethod(options.onKo, options.ctx, options);
     } else {
       runMethod(config.onKo, config.ctx, options, err);
@@ -53,27 +53,27 @@ var
   // check and parse
 
   checkBeforeCalling = function (options) {
-    return checkCalling(options, options.checkBeforeCalling, 'WRONG_REQUEST');
+    return checkCalling(options, options.checkBeforeCalling, options.reqData, 'WRONG_REQUEST');
   },
 
   parseBeforeCalling = function (options) {
-    parseCalling(options, options.parseBeforeCalling, 'reqDataParsed');
+    parseCalling(options, options.parseBeforeCalling, options.reqData, 'reqDataParsed');
   },
 
   checkAfterCalling = function (options) {
-    return checkCalling(options, options.checkAfterCalling, 'WRONG_RESPONSE');
+    return checkCalling(options, options.checkAfterCalling, options.resData, 'WRONG_RESPONSE');
   },
 
   parseAfterCalling = function (options) {
-    parseCalling(options, options.parseAfterCalling, 'resDataParsed');
+    parseCalling(options, options.parseAfterCalling, options.resData, 'resDataParsed');
   },
 
-  checkCalling = function (options, foo, errorCode) {
+  checkCalling = function (options, foo, data, errorCode) {
     var result = true;
     if (_.isFunction(foo)) {
       result = runMethod(foo, options.ctx, options);
     } else if (_.isPlainObject(foo)) {
-      result = semantic.validate(options.resData, foo);
+      result = semantic.validate(data, foo);
     }
     if (!result) {
       onKo(options, { errorCode });
@@ -81,13 +81,39 @@ var
     return result;
   },
 
-  parseCalling = function (options, foo, target) {
+  parseCalling = function (options, foo, data, target) {
     if (_.isFunction(foo)) {
       options[target] = runMethod(foo, options.ctx, options);
     } else if (_.isPlainObject(foo)) {
-      options[target] = semantic.parse(options.resData, foo);
+      options[target] = semantic.parse(data, foo);
     } else {
-      options[target] = _.cloneDeep(options.resData);
+      options[target] = _.cloneDeep(data);
+    }
+  },
+
+  // ajax
+
+  send = function (options) {
+    switch (options.method) {
+      case 'GET':
+        request(options.method, getUrl(options)).
+          accept('application/json').
+          query(options.reqDataParsed).
+          end(onComplete.bind(this, options));
+        break;
+      case 'POST':
+      case 'PUT':
+        request(options.method, getUrl(options)).
+          accept('application/json').
+          type('form').
+          send(options.reqDataParsed).
+          end(onComplete.bind(this, options));
+          break;
+      case 'DELETE':
+        request(options.method, getUrl(options)).
+          accept('application/json').
+          end(onComplete.bind(this, options));
+        break;
     }
   },
 
@@ -110,10 +136,7 @@ module.exports = {
     if (checkBeforeCalling(options)) {
       parseBeforeCalling(options);
       runMethod(config.onSend, config.ctx, options);
-      request(options.method, getUrl(options)).
-        accept('application/json').
-        query(options.reqDataParsed).
-        end(onComplete.bind(this, options));
+      send(options);
     }
   }
 

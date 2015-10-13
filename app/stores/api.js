@@ -10,7 +10,7 @@ var
 
   getBaseUrl = function () {
     var location = window.location;
-    return location.protocol + '//' + location.host + '/json/';
+    return 'http://localhost:2999/';
   },
 
   // callbacks
@@ -45,7 +45,7 @@ export default StoreClass.create({
     Api.setConfig({
       baseUrl: getBaseUrl(),
       ctx: this,
-      handledError: 503,
+      handledErrors: [503],
       onComplete,
       onOk,
       onKo,
