@@ -190,6 +190,15 @@ module.exports = {
     addChangedAttr(attr, options);
   },
 
+  remove (attr, where, options) {
+    var arr = _.get(atom, attr),
+      idx = _.findIndex(arr, where);
+    if (idx >= 0) {
+      arr.splice(idx, 1);
+      addChangedAttr(attr, options);
+    }
+  },
+
   at (attr, index, size) {
     return _.at(_.get(atom, attr), index, size);
   },
