@@ -1,13 +1,15 @@
 'use strict';
 
-import _ from 'lodash';
-import Api from './api';
-import Atom from './atom';
+var _ = require('lodash'),
+  api = require('api'),
+  atom = require('atom');
 
-var StoreClass = function (options) {
+var
+
+  StoreClass = function (options) {
     assign(this, options);
     _.result(this, 'init');
-    Atom.on(this);
+    atom.on(this);
   },
 
   assign = function (ctx, options) {
@@ -22,8 +24,8 @@ var StoreClass = function (options) {
 
 // aliases
 
-StoreClass.prototype.atom = Atom;
-StoreClass.prototype.apiSend = Api.apiSend;
+StoreClass.prototype.Atom = atom;
+StoreClass.prototype.apiSend = api.apiSend;
 
 module.exports = {
 

@@ -1,12 +1,12 @@
 'use strict';
 
-import React from 'react';
-import HeaderView from './header.jsx';
-import ContentView from './content.jsx';
-import FooterView from './footer.jsx';
-import TestView from './test.jsx';
+var React = require('react'),
+  ContentView = require('./content.jsx'),
+  FooterView = require('./footer.jsx'),
+  HeaderView = require('./header.jsx'),
+  TestView = require('./test.jsx');
 
-export default React.createClass({
+module.exports = React.createClass({
 
   displayName: __filename,
 

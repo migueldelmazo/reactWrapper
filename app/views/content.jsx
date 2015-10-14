@@ -1,10 +1,10 @@
 'use strict';
 
-import React from 'react';
-import ActiclesView from './articles.jsx';
-import ActiclesNewView from './articlesNew.jsx';
+var React = require('react'),
+  ActiclesView = require('./articles.jsx'),
+  ActiclesNewView = require('./articlesNew.jsx');
 
-export default React.createClass({
+module.exports = React.createClass({
 
   displayName: __filename,
 

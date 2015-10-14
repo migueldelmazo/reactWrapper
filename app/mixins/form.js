@@ -1,9 +1,11 @@
 'use strict';
 
-import _ from 'lodash';
-import React from 'react';
+var _ = require('lodash'),
+  React = require('react');
 
 var
+
+  // DOM events
 
   onChangeItem = function (key, val) {
     this.setState(key, val);
@@ -18,11 +20,13 @@ var
     this.formOnSubmit(ev);
   },
 
+  // helpers
+
   isValidForm = function () {
     return this.validationIsValidForm ? this.validationIsValidForm() : true;
   };
 
-export default {
+module.exports = {
 
   // input text
 

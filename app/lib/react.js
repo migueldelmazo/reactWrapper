@@ -2,19 +2,24 @@
 
 'use strict';
 
-import _ from 'lodash';
-import React from 'react';
-import Atom from '../lib/atom';
+var _ = require('lodash'),
+  React = require('react'),
+  ReactDom = require('react-dom'),
+  atom = require('atom');
 
 var
 
   // atom
 
   initAtom = function () {
+    setOnAtomChangeMethod.call(this);
+    atom.on(this);
+  },
+
+  setOnAtomChangeMethod = function () {
     if (this.atom && !this.atom.onChange) {
       this.atom.onChange = this.forceUpdate;
     }
-    Atom.on(this);
   },
 
   // state
@@ -63,7 +68,7 @@ React.createClass = function (spec) {
   spec._componentWillUnmount = spec.componentWillUnmount;
 
   spec.componentWillUnmount = function () {
-    Atom.off(this);
+    atom.off(this);
     _.result(this, '_componentWillUnmount');
   };
 
@@ -91,7 +96,7 @@ React.createClass = function (spec) {
 
   // atom
 
-  spec.atomGet = Atom.get;
+  spec.atomGet = atom.get;
 
   // events
 
@@ -127,10 +132,8 @@ React.createClass = function (spec) {
 
 React.initApp = function (view, el) {
   // wait to start the atom
-  setTimeout(function () {
-    React.render(view, el || document.body);
-  }, 0);
-
+  ReactDom.render(view, el || document.getElementById('app'));
 };
 
 module.exports = React;
+

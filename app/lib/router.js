@@ -1,70 +1,62 @@
 'use strict';
 
-import _ from 'lodash';
-import KeyRouter from 'KeyRouter';
-import StoreClass from '../lib/store';
+var _ = require('lodash'),
+  atom = require('atom'),
+  router = require('router');
 
 var atomAttr = {
     routes: 'router.routes',
     currentName: 'router.currentName',
     currentValues: 'router.currentValues'
-  },
+  };
 
-  updateAtom = function (routes) {
-    var currentRouter = _.last(routes);
-    this.atomSet(atomAttr.routes, routes);
-    this.atomSet(atomAttr.currentName, currentRouter.name);
-    this.atomSet(atomAttr.currentValues, currentRouter.values);
-  },
+router.addRoutes([
+  {
+    name: 'index',
+    path: '',
+    subRoute: [
+      {
+        name: 'addresses',
+        path: 'addresses',
+        subRoute: [
+          {
+            name: 'addressAdd',
+            path: 'add',
+            subRoute: [
+              {
+                name: 'addressAddAll',
+                path: 'addAll'
+              }
+            ]
+          },
+          {
+            name: 'addressUser',
+            path: ':user',
+            subRoute: [
+              {
+                name: 'addressId',
+                path: ':id'
+              }
+            ]
+          }
+        ]
+      },
+      {
+        name: 'payments',
+        path: 'payments'
+      }
+    ]
+  }
+]);
 
-  appRoutes = [
-    {
-      name: 'index',
-      path: '',
-      subRoute: [
-        {
-          name: 'addresses',
-          path: 'addresses',
-          subRoute: [
-            {
-              name: 'addressAdd',
-              path: 'add',
-              subRoute: [
-                {
-                  name: 'addressAddAll',
-                  path: 'addAll'
-                }
-              ]
-            },
-            {
-              name: 'addressUser',
-              path: ':user',
-              subRoute: [
-                {
-                  name: 'addressId',
-                  path: ':id'
-                }
-              ]
-            }
-          ]
-        },
-        {
-          name: 'payments',
-          path: 'payments'
-        }
-      ]
-    }
-  ];
-
-export default StoreClass.create({
-
-  init () {
-    KeyRouter.onChangeHash(updateAtom.bind(this));
-    KeyRouter.init(appRoutes);
-  },
-
-  atomAttr,
-
-  notFound: 'notFound'
-
+router.onChangeHash(function (routes) {
+  var currentRouter = _.last(routes);
+  atom.set(atomAttr.routes, routes);
+  atom.set(atomAttr.currentName, currentRouter.name);
+  atom.set(atomAttr.currentValues, currentRouter.values);
 });
+
+module.exports = {
+  atomAttr,
+  notFound: 'notFound'
+};

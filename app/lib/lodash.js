@@ -1,14 +1,14 @@
 'use strict';
 
-import _ from 'lodash';
+var _ = require('lodash');
 
-var
+_.mixin({
 
-  parseArray = function (arr = []) {
+  parseArray (arr = []) {
     return _.isArray(arr) ? arr : [arr];
   },
 
-  parseToObj = function (key, value) {
+  parseToObj (key, value) {
     var obj = {};
     if (_.isPlainObject(key)) {
       obj = key;
@@ -18,10 +18,10 @@ var
     return obj;
   },
 
-  resultWithArgs = function (obj, path) {
+  resultWithArgs (obj, path) {
     var result = _.get(obj, path);
     return _.isFunction(result) ? result.apply(obj, _.slice(arguments, 2)) : result;
-  };
+  }
 
-_.mixin({ parseArray, parseToObj, resultWithArgs });
+});
 

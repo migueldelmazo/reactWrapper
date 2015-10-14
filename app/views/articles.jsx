@@ -1,17 +1,17 @@
 'use strict';
 
-import _ from 'lodash';
-import React from 'react';
-import ArticlesStore from '../stores/articles';
+var _ = require('lodash'),
+  React = require('react'),
+  articlesStore = require('../stores/articles');
 
-export default React.createClass({
+module.exports = React.createClass({
 
   displayName: __filename,
 
   initialState: { col: 4 },
 
   atom: {
-    listeners: [ArticlesStore.atomAttr.articlesList]
+    listeners: [articlesStore.atomAttr.articlesList]
   },
 
   // DOM events
@@ -23,7 +23,7 @@ export default React.createClass({
   // render
 
   renderArticlesList () {
-    return _.map(this.atomGet(ArticlesStore.atomAttr.articlesList), function (article, idx) {
+    return _.map(this.atomGet(articlesStore.atomAttr.articlesList), function (article, idx) {
       return (
         <div key={idx}>
           <h4>{article.title}</h4>

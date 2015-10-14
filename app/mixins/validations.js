@@ -1,7 +1,7 @@
 'use strict';
 
-import _ from 'lodash';
-import React from 'react';
+var _ = require('lodash'),
+  React = require('react');
 
 var
 
@@ -67,7 +67,7 @@ var
     return validation.itemClassName || null;
   };
 
-export default {
+module.exports = {
 
   getInitialState () {
     return { validationFields: [] };

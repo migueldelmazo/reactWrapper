@@ -1,26 +1,26 @@
 'use strict';
 
-import _ from 'lodash';
-import React from 'react';
-import RouterStore from '../wrapper/router';
-import ArtilcesStore from '../stores/articles';
+var _ = require('lodash'),
+  React = require('react'),
+  router = require('../lib/router'),
+  articlesStore = require('../stores/articles');
 
-export default React.createClass({
+module.exports = React.createClass({
 
   displayName: __filename,
 
   atom: {
     listeners: [
-      RouterStore.atomAttr.currentName,
-      RouterStore.atomAttr.currentValues,
-      ArtilcesStore.atomAttr.articlesApiSending
+      router.atomAttr.currentName,
+      router.atomAttr.currentValues,
+      articlesStore.atomAttr.articlesApiSending
     ]
   },
 
   // render helpers
 
   getRoutes () {
-    var routes = _.map(this.atomGet(RouterStore.atomAttr.routes), function (route) {
+    var routes = _.map(this.atomGet(router.atomAttr.routes), function (route) {
       return (
         <li key={route.name}>
           {route.name} {JSON.stringify(route.values)}
@@ -46,7 +46,7 @@ export default React.createClass({
         </div>
         <div className='mdl-cell mdl-cell--6-col block'>
           <h4>API</h4>
-          {this.atomGet(ArtilcesStore.atomAttr.articlesApiSending, '').toString()}
+          {this.atomGet(articlesStore.atomAttr.articlesApiSending, '').toString()}
         </div>
       </div>
     );

@@ -1,11 +1,16 @@
 'use strict';
 
-require('./wrapper/lodash');
-require('./wrapper/api');
-require('./wrapper/react');
-require('./wrapper/router');
+var React,
+  AppView;
 
-import React from 'react';
-import AppView from './views/app.jsx';
+// init wrappers
 
-React.initApp(<AppView />);
+require('./lib/lodash');
+require('./lib/api');
+require('./lib/router');
+
+// init app
+
+React = require('./lib/react');
+AppView = require('./views/app.jsx');
+React.initApp(<AppView />, document.body);

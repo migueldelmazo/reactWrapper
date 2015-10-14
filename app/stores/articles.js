@@ -1,6 +1,6 @@
 'use strict';
 
-import StoreClass from '../lib/store';
+var StoreClass = require('../lib/store');
 
 var atomAttr = {
     newArticle: 'articles.new',
@@ -12,7 +12,7 @@ var atomAttr = {
     articlesApiSending: 'api.articles.sending'
   };
 
-export default StoreClass.create({
+module.exports = StoreClass.create({
 
   // atom
 
@@ -31,13 +31,6 @@ export default StoreClass.create({
     ]
   },
 
-  createNewArticle () {},
-
-  incArticlesIndex () {
-    var articlesIndex = this.atomGet(atomAttr.articlesIndex);
-    this.atomSet(atomAttr.articlesIndex, articlesIndex + 1);
-  },
-
   init () {
     setTimeout(this.apiGetArticles.bind(this), 500);
   },
@@ -50,19 +43,26 @@ export default StoreClass.create({
       atom: {
         prefix: 'articles',
         attr: atomAttr.articlesList,
-        state: atomAttr.articlesApiSending,
-        where: {},
-        options: {}
+        state: atomAttr.articlesApiSending
+        // where: {},
+        // options: {}
       },
       checkAfterCalling: {
         'articles[].title': ['isString', 'isNotEmpty']
       },
       parseAfterCalling: {
-        'articles[].id': 'parseString'
-      },
-      onOk () {},
-      onKo () {}
+        // 'articles[].id': 'parseString'
+      }
+      // onOk () {},
+      // onKo () {}
     });
+  },
+
+  createNewArticle () {},
+
+  incArticlesIndex () {
+    var articlesIndex = this.atomGet(atomAttr.articlesIndex);
+    this.atomSet(atomAttr.articlesIndex, articlesIndex + 1);
   }
 
 });

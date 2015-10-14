@@ -1,25 +1,25 @@
 'use strict';
 
-import _ from 'lodash';
-import React from 'react';
-import Semantic from 'semantic';
-import FormMixin from '../lib/form';
-import ValidationsMixin from '../lib/validations';
-import ArticlesStore from '../stores/articles';
+var _ = require('lodash'),
+  React = require('react'),
+  semantic = require('semantic'),
+  formMixin = require('../mixins/form'),
+  validationsMixin = require('../mixins/validations'),
+  articlesStore = require('../stores/articles');
 
-export default React.createClass({
+module.exports = React.createClass({
 
   displayName: __filename,
 
-  mixins: [FormMixin, ValidationsMixin],
+  mixins: [formMixin, validationsMixin],
 
   atom: {
     listeners: [
-      ArticlesStore.atomAttr.newArticleTitle,
-      ArticlesStore.atomAttr.newArticleSubtitle,
-      ArticlesStore.atomAttr.newArticleBody,
-      ArticlesStore.atomAttr.newArticle,
-      ArticlesStore.atomAttr.articlesIndex
+      articlesStore.atomAttr.newArticleTitle,
+      articlesStore.atomAttr.newArticleSubtitle,
+      articlesStore.atomAttr.newArticleBody,
+      articlesStore.atomAttr.newArticle,
+      articlesStore.atomAttr.articlesIndex
     ]
   },
 
@@ -29,18 +29,18 @@ export default React.createClass({
   },
 
   submitForm () {
-    ArticlesStore.createNewArticle(_.pick(this.state, ['title', 'subtitle', 'body']));
+    articlesStore.createNewArticle(_.pick(this.state, ['title', 'subtitle', 'body']));
   },
 
   validations: {
     title: {
-      fn: Semantic.isNotEmpty,
+      fn: semantic.isNotEmpty,
       msg: 'epic fail',
       wrapperClassName: 'lolo',
       itemClassName: 'item'
     },
     subtitle: {
-      fn: Semantic.isNotEmpty,
+      fn: semantic.isNotEmpty,
       msg: 'epic fail',
       wrapperClassName: 'lolo',
       itemClassName: 'item'
@@ -80,9 +80,9 @@ export default React.createClass({
           })}
         </form>
 
-        <p onClick={this.onEv(ArticlesStore.incArticlesIndex)}>
+        <p onClick={this.onEv(articlesStore.incArticlesIndex)}>
           Incr:
-          {this.atomGet(ArticlesStore.atomAttr.articlesIndex)}
+          {this.atomGet(articlesStore.atomAttr.articlesIndex)}
         </p>
 
       </div>
