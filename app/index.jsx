@@ -1,9 +1,11 @@
 'use strict';
 
-require('./stores/api');
-require('./stores/router');
+require('./wrapper/lodash');
+require('./wrapper/api');
+require('./wrapper/react');
+require('./wrapper/router');
 
-import React from './lib/react';
+import React from 'react';
 import AppView from './views/app.jsx';
 
 React.initApp(<AppView />);

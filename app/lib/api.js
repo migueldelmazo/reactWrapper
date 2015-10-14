@@ -95,12 +95,6 @@ var
 
   send = function (options) {
     switch (options.method) {
-      case 'GET':
-        request(options.method, getUrl(options)).
-          accept('application/json').
-          query(options.reqDataParsed).
-          end(onComplete.bind(this, options));
-        break;
       case 'POST':
       case 'PUT':
         request(options.method, getUrl(options)).
@@ -114,6 +108,11 @@ var
           accept('application/json').
           end(onComplete.bind(this, options));
         break;
+      default:
+        request(options.method, getUrl(options)).
+          accept('application/json').
+          query(options.reqDataParsed).
+          end(onComplete.bind(this, options));
     }
   },
 

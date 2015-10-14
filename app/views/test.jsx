@@ -2,22 +2,20 @@
 
 import _ from 'lodash';
 import React from 'react';
-import RouterStore from '../stores/router';
+import RouterStore from '../wrapper/router';
 import ArtilcesStore from '../stores/articles';
 
 export default React.createClass({
 
   displayName: __filename,
 
-  atomListener: [
-    {
-      atom: [
-        RouterStore.atomAttr.currentName,
-        RouterStore.atomAttr.currentValues,
-        ArtilcesStore.atomAttr.articlesApiSending
-      ]
-    }
-  ],
+  atom: {
+    listeners: [
+      RouterStore.atomAttr.currentName,
+      RouterStore.atomAttr.currentValues,
+      ArtilcesStore.atomAttr.articlesApiSending
+    ]
+  },
 
   // render helpers
 

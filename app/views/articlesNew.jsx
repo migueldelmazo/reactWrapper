@@ -2,7 +2,7 @@
 
 import _ from 'lodash';
 import React from 'react';
-import Util from '../lib/util';
+import Semantic from 'semantic';
 import FormMixin from '../lib/form';
 import ValidationsMixin from '../lib/validations';
 import ArticlesStore from '../stores/articles';
@@ -13,17 +13,15 @@ export default React.createClass({
 
   mixins: [FormMixin, ValidationsMixin],
 
-  atomListener: [
-    {
-      atom: [
-        ArticlesStore.atomAttr.newArticleTitle,
-        ArticlesStore.atomAttr.newArticleSubtitle,
-        ArticlesStore.atomAttr.newArticleBody,
-        ArticlesStore.atomAttr.newArticle,
-        ArticlesStore.atomAttr.articlesIndex
-      ]
-    }
-  ],
+  atom: {
+    listeners: [
+      ArticlesStore.atomAttr.newArticleTitle,
+      ArticlesStore.atomAttr.newArticleSubtitle,
+      ArticlesStore.atomAttr.newArticleBody,
+      ArticlesStore.atomAttr.newArticle,
+      ArticlesStore.atomAttr.articlesIndex
+    ]
+  },
 
   initialState: {
     title: '',
@@ -36,13 +34,13 @@ export default React.createClass({
 
   validations: {
     title: {
-      regex: Util.regex.isNotEmpty,
+      fn: Semantic.isNotEmpty,
       msg: 'epic fail',
       wrapperClassName: 'lolo',
       itemClassName: 'item'
     },
     subtitle: {
-      regex: Util.regex.isNotEmpty,
+      fn: Semantic.isNotEmpty,
       msg: 'epic fail',
       wrapperClassName: 'lolo',
       itemClassName: 'item'
@@ -50,7 +48,6 @@ export default React.createClass({
   },
 
   render () {
-    window.vista = this;
     return (
       <div className='mdl-cell mdl-cell--2-col block'>
         <h4>New article</h4>

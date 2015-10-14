@@ -11,7 +11,7 @@ var
     var validations = _.parseArray(this.validations[field]),
       val = this.state[field];
     return _.filter(validations, function (validation) {
-      return !validation.regex.test(val);
+      return validation.regex ? !validation.regex.test(val) : !validation.fn(val);
     });
   },
 

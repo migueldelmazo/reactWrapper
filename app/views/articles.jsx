@@ -10,11 +10,9 @@ export default React.createClass({
 
   initialState: { col: 4 },
 
-  atomListener: [
-    {
-      atom: [ArticlesStore.atomAttr.articlesList]
-    }
-  ],
+  atom: {
+    listeners: [ArticlesStore.atomAttr.articlesList]
+  },
 
   // DOM events
 

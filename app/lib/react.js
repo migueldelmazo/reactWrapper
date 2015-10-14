@@ -4,9 +4,18 @@
 
 import _ from 'lodash';
 import React from 'react';
-import Atom from './atom';
+import Atom from '../lib/atom';
 
 var
+
+  // atom
+
+  initAtom = function () {
+    if (this.atom && !this.atom.onChange) {
+      this.atom.onChange = this.forceUpdate;
+    }
+    Atom.on(this);
+  },
 
   // state
 
@@ -47,7 +56,7 @@ React.createClass = function (spec) {
   spec._componentWillMount = spec.componentWillMount;
 
   spec.componentWillMount = function () {
-    Atom.on(this);
+    initAtom.call(this);
     _.result(this, '_componentWillMount');
   };
 
@@ -82,21 +91,7 @@ React.createClass = function (spec) {
 
   // atom
 
-  spec.onAtomChanged = function () {
-    this.forceUpdate();
-  };
-
   spec.atomGet = Atom.get;
-
-  // actions
-
-  spec.storeToState = function (action) {
-    this.setState(action.stateAttr, action.method());
-  };
-
-  spec.atomToState = function (action) {
-    this.setState(action.stateAttr, this.atomGet(action.atomAttr));
-  };
 
   // events
 

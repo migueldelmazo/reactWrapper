@@ -1,19 +1,52 @@
+/* eslint no-console: 0 */
+
 'use strict';
 
 import _ from 'lodash';
 
 var atom = {},
 
-  // on change attributes
+  // contexts
+
+  contexts = [],
+
+  addContext = function (context) {
+    var contextAtom = context.atom;
+    if (contextAtom && contextAtom.listeners && contextAtom.onChange) {
+      contextAtom.listeners = _.flattenDeep(contextAtom.listeners);
+      contexts.push(context);
+    }
+  },
+
+  removeContext = function (context) {
+    var contextAtom = context.atom,
+      idx;
+    if (contextAtom && contextAtom.listeners && contextAtom.onChange) {
+      idx = contexts.indexOf(context);
+      if (idx >= 0) {
+        contexts.splice(idx, 1);
+      }
+    }
+  },
+
+  // initial values
+
+  setInitialValues = function (context) {
+    _.each(_.get(context, 'atom.initialValues'), function (item) {
+      _.set(atom, item.attr, _.result(item, 'value'), item.options);
+    });
+  },
+
+  // on change
 
   changedAttrs = [],
 
-  addChangedAttr = function (attr, options) {
-    if (options && options.silent) {
+  onChange = function (attr, options) {
+    if (!attr && options && options.silent) {
       return;
     }
     changedAttrs.push(attr);
-    triggerDebounced();
+    triggerChangesDebounced();
   },
 
   getChangedAttrs = function () {
@@ -22,75 +55,28 @@ var atom = {},
     return _changedAttrs;
   },
 
-  // trigger changes
-
-  triggerDebounced = _.debounce(function () {
+  triggerChanges = function () {
     var attrs = getChangedAttrs();
     console.group('atom attrs changed', attrs);
     _.each(contexts, function (context) {
-      var changedItems = filterChangedItems(context, attrs);
-      runItemActions(context, changedItems);
-      triggerChangedItems(context, changedItems);
+      if (haveAttrChanged(context, attrs)) {
+        triggerChangesToContext(context);
+      }
     });
     console.groupEnd();
-  }, 10),
+  },
 
-  filterChangedItems = function (context, attrs) {
-    return _.filter(context.atomListener, function (item) {
-      return _.find(item.atom, function (itemAttr) {
-        return attrs.indexOf(itemAttr) >= 0;
-      });
+  triggerChangesDebounced = _.debounce(triggerChanges, 10),
+
+  haveAttrChanged = function (context, attrs) {
+    return !!_.find(context.atom.listeners, function (attr) {
+      return attrs.indexOf(attr) >= 0;
     });
   },
 
-  triggerChangedItems = function (context, changedItems) {
-    if (!_.isEmpty(changedItems) && _.isFunction(context.onAtomChanged)) {
-      context.onAtomChanged(changedItems);
-    }
-  },
-
-  // actions
-
-  runItemActions = function (context, items) {
-    _.each(items, function (item) {
-      _.each(item.actions, runItemAction.bind(context));
-    });
-  },
-
-  runItemAction = function (action) {
-    var actionFn = getActionFn.call(this, action);
-    if (actionFn) {
-      actionFn.call(this, action);
-    }
-  },
-
-  getActionFn = function (action) {
-    var fn = this[action.action];
-    return _.isFunction(fn) ? fn : undefined;
-  },
-
-  // contexts
-
-  contexts = [],
-
-  parseContextListeners = function (context) {
-    if (context.atomListener) {
-      _.each(context.atomListener, function (item) {
-        if (!_.isArray(item.atom)) {
-          item.atom = [item.atom];
-        }
-      });
-      contexts.push(context);
-    }
-  },
-
-  // initial data
-
-  setInitialData = function (context) {
-    if (context.atomInitial) {
-      _.each(context.atomInitial, function (item) {
-        module.exports.set(item[0], item[1]);
-      });
+  triggerChangesToContext = function (context) {
+    if (_.isFunction(context.atom.onChange)) {
+      context.atom.onChange.call(context);
     }
   };
 
@@ -99,84 +85,94 @@ module.exports = {
   // listeners
 
   on (context) {
-    parseContextListeners(context);
-    setInitialData(context);
+    addContext(context);
+    setInitialValues(context);
   },
 
   off (context) {
-    var index;
-    if (context.atomListener) {
-      index = contexts.indexOf(context);
-      if (index >= 0) {
-        contexts.splice(index, 1);
-      }
-    }
+    removeContext(context);
+  },
+
+  // mixin
+
+  mixin (mixins) {
+    _.each(mixins, function (value, key) {
+      module.exports[key] = value.bind(module.exports);
+    });
+  },
+
+  onChange (attr, options) {
+    onChange(attr, options);
   },
 
   // get/set values
 
-  has (attr) {
-    return _.has(atom, attr);
+  del (attr, options) {
+    _.set(atom, attr, undefined);
+    onChange(attr, options);
   },
 
   get (attr, defaultValue) {
     return _.get(atom, attr, defaultValue);
   },
 
+  has (attr) {
+    return _.has(atom, attr);
+  },
+
   set (attr, value, options) {
     if (!_.isEqual(_.get(atom, attr), value)) {
       _.set(atom, attr, value);
-      addChangedAttr(attr, options);
+      onChange(attr, options);
     }
   },
 
-  del (attr, options) {
-    _.set(atom, attr, undefined);
-    addChangedAttr(attr, options);
+  // get/set collections
+
+  add (attr, value, options) {
+    var arr = _.get(atom, attr);
+    if (_.isArray(arr)) {
+      arr.splice(0, 0, value);
+      onChange(attr, options);
+    }
   },
 
-  // get/set collections
+  at (attr, index, size) {
+    return _.at(_.get(atom, attr), index, size);
+  },
+
+  concat (attr, value, options) {
+    var arr = _.get(atom, attr);
+    if (_.isArray(arr)) {
+      _.set(atom, attr, arr.concat(value));
+      onChange(attr, options);
+    }
+  },
 
   pop (attr, options) {
     var arr = _.get(atom, attr),
       result;
     if (_.isArray(arr)) {
       result = arr.pop();
-      addChangedAttr(attr, options);
+      onChange(attr, options);
     }
     return result;
-  },
-
-  add (attr, value, options) {
-    var arr = _.get(atom, attr);
-    if (_.isArray(arr)) {
-      arr.splice(0, 0, value);
-      addChangedAttr(attr, options);
-    }
   },
 
   push (attr, value, options) {
     var arr = _.get(atom, attr);
     if (_.isArray(arr)) {
       arr.push(value);
-      addChangedAttr(attr, options);
+      onChange(attr, options);
     }
   },
 
-  concat (attr, value, options) {
-    var arr = _.get(atom, attr);
-    if (_.isArray(arr)) {
-      arr.concat(value);
-      addChangedAttr(attr, options);
-    }
-  },
-
-  update (attr, where, value, options) {
+  remove (attr, where, options) {
     var arr = _.get(atom, attr),
-      item = _.find(arr, where);
-    if (item) {
-      _.merge(item, value);
-      addChangedAttr(attr, options);
+      idx = _.findIndex(arr, where);
+    if (idx >= 0) {
+      arr.splice(idx, 1);
+      onChange(attr, options);
     }
   },
 
@@ -187,24 +183,20 @@ module.exports = {
       value = [value];
     }
     _.set(attr, value);
-    addChangedAttr(attr, options);
-  },
-
-  remove (attr, where, options) {
-    var arr = _.get(atom, attr),
-      idx = _.findIndex(arr, where);
-    if (idx >= 0) {
-      arr.splice(idx, 1);
-      addChangedAttr(attr, options);
-    }
-  },
-
-  at (attr, index, size) {
-    return _.at(_.get(atom, attr), index, size);
+    onChange(attr, options);
   },
 
   size (attr) {
     return _.size(_.get(atom, attr));
+  },
+
+  update (attr, where, value, options) {
+    var arr = _.get(atom, attr),
+      item = _.find(arr, where);
+    if (item) {
+      _.merge(item, value);
+      onChange(attr, options);
+    }
   }
 
 };

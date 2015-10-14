@@ -18,12 +18,20 @@ export default StoreClass.create({
 
   atomAttr,
 
-  atomInitial: [
-    [atomAttr.articlesList, []],
-    [atomAttr.articlesIndex, 0]
-  ],
+  atom: {
+    initialValues: [
+      {
+        attr: atomAttr.articlesList,
+        value: []
+      },
+      {
+        attr: atomAttr.articlesIndex,
+        value: 0
+      }
+    ]
+  },
 
-  createNewArticle (data) {},
+  createNewArticle () {},
 
   incArticlesIndex () {
     var articlesIndex = this.atomGet(atomAttr.articlesIndex);
@@ -39,9 +47,13 @@ export default StoreClass.create({
       method: 'GET',
       url: 'articles.json',
       reqData: {},
-      atomPrefix: 'articles',
-      atomAttr: atomAttr.articlesList,
-      atomState: atomAttr.articlesApiSending,
+      atom: {
+        prefix: 'articles',
+        attr: atomAttr.articlesList,
+        state: atomAttr.articlesApiSending,
+        where: {},
+        options: {}
+      },
       checkAfterCalling: {
         'articles[].title': ['isString', 'isNotEmpty']
       },

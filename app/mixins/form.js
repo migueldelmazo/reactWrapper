@@ -66,7 +66,7 @@ export default {
 
   // DOM events
 
-  formOnSubmit (ev) {
+  formOnSubmit () {
     _.result(this, 'validationAddAllFields');
     if (isValidForm.bind(this)) {
       _.result(this, 'submitForm');
