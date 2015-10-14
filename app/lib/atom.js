@@ -147,6 +147,14 @@ module.exports = {
     return result;
   },
 
+  add (attr, value, options) {
+    var arr = _.get(atom, attr);
+    if (_.isArray(arr)) {
+      arr.splice(0, 0, value);
+      addChangedAttr(attr, options);
+    }
+  },
+
   push (attr, value, options) {
     var arr = _.get(atom, attr);
     if (_.isArray(arr)) {
@@ -163,10 +171,19 @@ module.exports = {
     }
   },
 
+  update (attr, where, value, options) {
+    var arr = _.get(atom, attr),
+      item = _.find(arr, where);
+    if (item) {
+      _.merge(item, value);
+      addChangedAttr(attr, options);
+    }
+  },
+
   reset (attr, value, options) {
     if (value === undefined) {
       value = [];
-    } else if (_.isArray(value)) {
+    } else if (!_.isArray(value)) {
       value = [value];
     }
     _.set(attr, value);
@@ -183,4 +200,5 @@ module.exports = {
 
 };
 
+window.Atom = module.exports;
 window.atom = atom;
