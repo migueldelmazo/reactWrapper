@@ -7,13 +7,12 @@
     "api": "git://github.com/migueldelmazo/api.git",
     "atom": "git://github.com/migueldelmazo/atom.git",
     "router": "git://github.com/migueldelmazo/router.git",
-    "semantic": "git://github.com/migueldelmazo/semantic.git",
     "express": "4.13.3",
     "lodash": "3.10.1",
     "react": "0.14.0",
     "react-dom": "0.14.0",
-    "material-design-lite": "~1.0.4-2",
-    "superagent": "~1.4.0"
+    "semantik": "1.1.0",
+    "material-design-lite": "~1.0.4-2"
   },
   "devDependencies": {
     "babelify": "^5.0.3",
