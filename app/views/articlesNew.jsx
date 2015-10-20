@@ -2,7 +2,7 @@
 
 var _ = require('lodash'),
   React = require('react'),
-  semantic = require('semantic'),
+  semantik = require('semantik'),
   formMixin = require('../mixins/form'),
   validationsMixin = require('../mixins/validations'),
   articlesStore = require('../stores/articles');
@@ -34,13 +34,13 @@ module.exports = React.createClass({
 
   validations: {
     title: {
-      fn: semantic.isNotEmpty,
+      fn: semantik.isNotEmpty,
       msg: 'epic fail',
       wrapperClassName: 'lolo',
       itemClassName: 'item'
     },
     subtitle: {
-      fn: semantic.isNotEmpty,
+      fn: semantik.isNotEmpty,
       msg: 'epic fail',
       wrapperClassName: 'lolo',
       itemClassName: 'item'
