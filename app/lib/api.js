@@ -6,26 +6,9 @@ var _ = require('lodash'),
 
 var
 
-  // url
-
-  getBaseUrl = function () {
-    return 'http://localhost:2999/';
-  },
-
-  // callbacks
-
-  onSend = function (options) {
-    toggleAtomState(options, true);
-  },
-
-  onOk = function (options) {
-    changeAtom(options);
-  },
-
-  onKo = function () {},
-
-  onComplete = function (options) {
-    toggleAtomState(options, false);
+  atomAttr = {
+    errorCode: 'api.errorCode',
+    errorMsg: 'api.errorMsg'
   },
 
   // atom
@@ -79,11 +62,26 @@ var
   };
 
 api.setConfig({
-  baseUrl: getBaseUrl(),
+  baseUrl: 'http://localhost:2999/',
   ctx: this,
   handledErrors: [503],
-  onComplete,
-  onOk,
-  onKo,
-  onSend
+
+  onComplete (options) {
+    toggleAtomState(options, false);
+  },
+
+  onOk (options) {
+    changeAtom(options);
+  },
+
+  onKo (options, err) {
+    atom.set(atomAttr.errorCode, _.get(err, 'status', 'UNKNOWN_ERROR'));
+    atom.set(atomAttr.errorMsg, _.get(err, 'response.body.errorMsg', 'Unknown error'));
+  },
+
+  onSend (options) {
+    toggleAtomState(options, true);
+  }
 });
+
+
