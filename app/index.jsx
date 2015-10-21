@@ -13,4 +13,4 @@ require('./lib/router');
 
 React = require('./lib/react');
 AppView = require('./views/app.jsx');
-React.initApp(<AppView />, document.body);
+React.initApp(<AppView />, document.getElementById('app'));

@@ -131,8 +131,7 @@ React.createClass = function (spec) {
 };
 
 React.initApp = function (view, el) {
-  // wait to start the atom
-  ReactDom.render(view, el || document.getElementById('app'));
+  ReactDom.render(view, el);
 };
 
 module.exports = React;
