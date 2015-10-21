@@ -3,7 +3,7 @@
 var _ = require('lodash'),
   React = require('react'),
   router = require('../lib/router'),
-  articlesStore = require('../stores/articles');
+  articlesCrtl = require('../controllers/articles');
 
 module.exports = React.createClass({
 
@@ -13,7 +13,7 @@ module.exports = React.createClass({
     listeners: [
       router.atomAttr.currentName,
       router.atomAttr.currentValues,
-      articlesStore.atomAttr.articlesApiSending
+      articlesCrtl.atomAttr.articlesApiSending
     ]
   },
 
@@ -46,7 +46,7 @@ module.exports = React.createClass({
         </div>
         <div className='mdl-cell mdl-cell--6-col block'>
           <h4>API</h4>
-          {this.atomGet(articlesStore.atomAttr.articlesApiSending, '').toString()}
+          {this.atomGet(articlesCrtl.atomAttr.articlesApiSending, '').toString()}
         </div>
       </div>
     );

@@ -41,13 +41,13 @@ module.exports = {
     );
   },
 
-  // input text
+  // input textarea
 
   formRenderTextarea (options) {
     options = options || {};
     return (
       <textarea
-        defaultValue={_.get(options, 'val', '')}
+        value={_.get(options, 'val', '')}
         placeholder={_.get(options, 'placeholder')}
         onChange={this.onEv(onChangeTextField, options)} />
     );

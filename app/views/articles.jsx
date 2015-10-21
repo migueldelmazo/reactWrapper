@@ -2,16 +2,20 @@
 
 var _ = require('lodash'),
   React = require('react'),
-  articlesStore = require('../stores/articles');
+  articlesCrtl = require('../controllers/articles');
 
 module.exports = React.createClass({
 
   displayName: __filename,
 
+  propTypes: {
+    text: React.PropTypes.string
+  },
+
   initialState: { col: 4 },
 
   atom: {
-    listeners: [articlesStore.atomAttr.articlesList]
+    listeners: [articlesCrtl.atomAttr.articlesList]
   },
 
   // DOM events
@@ -23,7 +27,7 @@ module.exports = React.createClass({
   // render
 
   renderArticlesList () {
-    return _.map(this.atomGet(articlesStore.atomAttr.articlesList), function (article, idx) {
+    return _.map(this.atomGet(articlesCrtl.atomAttr.articlesList), function (article, idx) {
       return (
         <div key={idx}>
           <h4>{article.title}</h4>

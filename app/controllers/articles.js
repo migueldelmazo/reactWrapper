@@ -1,6 +1,6 @@
 'use strict';
 
-var StoreClass = require('../lib/store');
+var CtrlClass = require('../lib/controller');
 
 var atomAttr = {
     newArticle: 'articles.new',
@@ -12,7 +12,7 @@ var atomAttr = {
     articlesApiSending: 'api.articles.sending'
   };
 
-module.exports = StoreClass.create({
+module.exports = CtrlClass.create({
 
   // atom
 

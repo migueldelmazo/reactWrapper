@@ -6,7 +6,7 @@ var _ = require('lodash'),
 
 var
 
-  StoreClass = function (options) {
+  ControllerClass = function (options) {
     assign(this, options);
     _.result(this, 'init');
     atom.on(this);
@@ -24,13 +24,13 @@ var
 
 // aliases
 
-StoreClass.prototype.Atom = atom;
-StoreClass.prototype.apiSend = api.apiSend;
+ControllerClass.prototype.Atom = atom;
+ControllerClass.prototype.apiSend = api.apiSend;
 
 module.exports = {
 
   create (options) {
-    return new StoreClass(options);
+    return new ControllerClass(options);
   }
 
 };

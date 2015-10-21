@@ -5,7 +5,7 @@ var _ = require('lodash'),
   semantik = require('semantik'),
   formMixin = require('../mixins/form'),
   validationsMixin = require('../mixins/validations'),
-  articlesStore = require('../stores/articles');
+  articlesCrtl = require('../controllers/articles');
 
 module.exports = React.createClass({
 
@@ -15,11 +15,11 @@ module.exports = React.createClass({
 
   atom: {
     listeners: [
-      articlesStore.atomAttr.newArticleTitle,
-      articlesStore.atomAttr.newArticleSubtitle,
-      articlesStore.atomAttr.newArticleBody,
-      articlesStore.atomAttr.newArticle,
-      articlesStore.atomAttr.articlesIndex
+      articlesCrtl.atomAttr.newArticleTitle,
+      articlesCrtl.atomAttr.newArticleSubtitle,
+      articlesCrtl.atomAttr.newArticleBody,
+      articlesCrtl.atomAttr.newArticle,
+      articlesCrtl.atomAttr.articlesIndex
     ]
   },
 
@@ -29,7 +29,7 @@ module.exports = React.createClass({
   },
 
   submitForm () {
-    articlesStore.createNewArticle(_.pick(this.state, ['title', 'subtitle', 'body']));
+    articlesCrtl.createNewArticle(_.pick(this.state, ['title', 'subtitle', 'body']));
   },
 
   validations: {
@@ -80,9 +80,9 @@ module.exports = React.createClass({
           })}
         </form>
 
-        <p onClick={this.onEv(articlesStore.incArticlesIndex)}>
+        <p onClick={this.onEv(articlesCrtl.incArticlesIndex)}>
           Incr:
-          {this.atomGet(articlesStore.atomAttr.articlesIndex)}
+          {this.atomGet(articlesCrtl.atomAttr.articlesIndex)}
         </p>
 
       </div>
