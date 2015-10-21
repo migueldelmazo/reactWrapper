@@ -41,6 +41,12 @@ var
     }
   },
 
+  // props
+
+  areEqualProps = function (nextProps) {
+    return this._propTypesKeys ? _.isEqual(_.pick(this.props, this._propTypesKeys), _.pick(nextProps, this._propTypesKeys)) : true;
+  },
+
   // utils
 
   analytics = function (msg) {
@@ -74,9 +80,15 @@ React.createClass = function (spec) {
 
   // shouldComponentUpdate
 
-  spec.shouldComponentUpdate = function (props, state) {
-    return !_.isEqual(this.props, props) || !_.isEqual(this.state, state);
+  spec.shouldComponentUpdate = function (nextProps, nextState) {
+    return !areEqualProps.call(this, nextProps) || !_.isEqual(this.state, nextState);
   };
+
+  // props
+
+  if (spec.propTypes) {
+    spec._propTypesKeys = _.keys(spec.propTypes);
+  }
 
   // render
 
