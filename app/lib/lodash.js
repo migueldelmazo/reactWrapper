@@ -4,6 +4,19 @@ var _ = require('lodash');
 
 _.mixin({
 
+  debounceWithArgs (fn, time) {
+    var timeoutId,
+      args = [];
+    return function () {
+      args.push(arguments);
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(function () {
+        fn(args);
+        args = [];
+      }, time);
+    };
+  },
+
   parseArray (arr = []) {
     return _.isArray(arr) ? arr : [arr];
   },
