@@ -65,21 +65,31 @@ var
 
   getItemClassName = function (validation) {
     return validation.itemClassName || null;
+  },
+
+  // changed fields
+
+  addChangedField = function (fields) {
+    var __validationFields = _.flattenDeep(fields).concat(this.state.__validationFields);
+    this.setState('__validationFields', _.uniq(__validationFields));
   };
 
 module.exports = {
 
   getInitialState () {
-    return { validationFields: [] };
+    return { __validationFields: [] };
+  },
+
+  componentDidMount () {
+    this._addChangedFieldDebounced = _.debounceWithArgs(addChangedField.bind(this), 1000);
   },
 
   validationAddChangedField (field) {
-    var validationFields = _.parseArray(field).concat(this.state.validationFields);
-    this.setState('validationFields', _.uniq(validationFields));
+    this._addChangedFieldDebounced(field);
   },
 
   validationAddAllFields () {
-    this.setState('validationFields', _.keys(this.validations));
+    this.setState('__validationFields', _.keys(this.validations));
   },
 
   validationResetChangedFields () {
@@ -87,7 +97,7 @@ module.exports = {
   },
 
   validationRender (field) {
-    var shouldShowValidation = _.indexOf(this.state.validationFields, field) >= 0;
+    var shouldShowValidation = _.indexOf(this.state.__validationFields, field) >= 0;
     return shouldShowValidation ? renderValidation(getValidationField.call(this, field)) : null;
   },
 
