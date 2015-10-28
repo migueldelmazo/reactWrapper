@@ -1,7 +1,7 @@
 'use strict';
 
 var React = require('react'),
-  Router = require('router');
+  Router = require('../lib/router');
 
 module.exports = React.createClass({
 

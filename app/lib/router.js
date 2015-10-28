@@ -2,7 +2,7 @@
 
 var _ = require('lodash'),
   Atom = require('atom'),
-  router = require('router');
+  Router = require('router');
 
 var atomAttr = {
     router: 'router',
@@ -11,14 +11,14 @@ var atomAttr = {
     currentValues: 'router.currentValues'
   };
 
-router.onChangeHash(function (routes) {
+Router.onChangeHash(function (routes) {
   var currentRouter = _.last(routes);
   Atom.set(atomAttr.routes, routes);
   Atom.set(atomAttr.currentName, currentRouter.name);
   Atom.set(atomAttr.currentValues, currentRouter.values);
 });
 
-router.addRoutes([
+Router.addRoutes([
   {
     name: 'index',
     path: '',
@@ -59,6 +59,8 @@ module.exports = {
 
   getParentRoutes () {
     return Atom.get(atomAttr.routes);
-  }
+  },
+
+  getUrl: Router.getUrl
 
 };
