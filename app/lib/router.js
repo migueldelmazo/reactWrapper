@@ -32,7 +32,7 @@ router.addRoutes([
             path: 'add'
           },
           {
-            name: 'editUser',
+            name: 'userEdit',
             path: ':user'
           }
         ]

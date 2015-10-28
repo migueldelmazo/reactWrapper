@@ -37,6 +37,11 @@ module.exports = React.createClass({
               <UserForm />
             </Col>
           </RouterComponent>
+          <RouterComponent routeName='userEdit'>
+            <Col md={4}>
+              <UserForm />
+            </Col>
+          </RouterComponent>
         </Grid>
       </div>
     );

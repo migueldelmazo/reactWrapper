@@ -2,6 +2,7 @@
 
 var _ = require('lodash'),
   React = require('react'),
+  Router = require('router'),
   UsersCtrl = require('../controllers/users');
 
 module.exports = React.createClass({
@@ -17,6 +18,9 @@ module.exports = React.createClass({
           <h4>{user.username}</h4>
           <p>{user.email}</p>
           <p>{user.biography}</p>
+          <a href={Router.getUrl('userEdit', { user: user.id } )}>
+            <span className='glyphicon glyphicon-pencil' aria-hidden='true' />
+          </a>
         </li>
       );
     });
