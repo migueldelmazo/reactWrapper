@@ -9,18 +9,18 @@ app.use(crossdomain);
 app.all('/*', function (req, res) {
   setTimeout(function () {
     res.send({
-      "articles": [
+      "users": [
         {
           "id": 1,
-          "title": "Título 1",
-          "subtitle": "Subtítulo 1",
-          "body": "Cuerpo 1"
+          "username": "John Doe",
+          "email": "john.doe@gmail.com",
+          "biography": "Lorem ipsum"
         },
         {
           "id": 2,
-          "title": "Título 2",
-          "subtitle": "Subtítulo 2",
-          "body": "Cuerpo 2"
+          "username": "John Smith",
+          "email": "john.smith@gmail.com",
+          "biography": "dolorem ipsum quia"
         }
       ]
     });

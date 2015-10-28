@@ -1,14 +1,22 @@
 'use strict';
 
 var _ = require('lodash'),
-  atom = require('atom'),
+  Atom = require('atom'),
   router = require('router');
 
 var atomAttr = {
+    router: 'router',
     routes: 'router.routes',
     currentName: 'router.currentName',
     currentValues: 'router.currentValues'
   };
+
+router.onChangeHash(function (routes) {
+  var currentRouter = _.last(routes);
+  Atom.set(atomAttr.routes, routes);
+  Atom.set(atomAttr.currentName, currentRouter.name);
+  Atom.set(atomAttr.currentValues, currentRouter.values);
+});
 
 router.addRoutes([
   {
@@ -16,47 +24,41 @@ router.addRoutes([
     path: '',
     subRoute: [
       {
-        name: 'addresses',
-        path: 'addresses',
+        name: 'users',
+        path: 'users',
         subRoute: [
           {
-            name: 'addressAdd',
-            path: 'add',
-            subRoute: [
-              {
-                name: 'addressAddAll',
-                path: 'addAll'
-              }
-            ]
+            name: 'userAdd',
+            path: 'add'
           },
           {
-            name: 'addressUser',
-            path: ':user',
-            subRoute: [
-              {
-                name: 'addressId',
-                path: ':id'
-              }
-            ]
+            name: 'editUser',
+            path: ':user'
           }
         ]
-      },
-      {
-        name: 'payments',
-        path: 'payments'
       }
     ]
   }
 ]);
 
-router.onChangeHash(function (routes) {
-  var currentRouter = _.last(routes);
-  atom.set(atomAttr.routes, routes);
-  atom.set(atomAttr.currentName, currentRouter.name);
-  atom.set(atomAttr.currentValues, currentRouter.values);
-});
-
 module.exports = {
+
   atomAttr,
-  notFound: 'notFound'
+
+  isCurrentRoute (name) {
+    return Atom.get(atomAttr.currentName) === name;
+  },
+
+  isParentRoute (name) {
+    return _.find(Atom.get(atomAttr.routes), { name });
+  },
+
+  getCurrentRoute () {
+    return Atom.get(atomAttr.currentName);
+  },
+
+  getParentRoutes () {
+    return Atom.get(atomAttr.routes);
+  }
+
 };

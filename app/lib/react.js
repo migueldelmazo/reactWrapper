@@ -9,19 +9,6 @@ var _ = require('lodash'),
 
 var
 
-  // atom
-
-  initAtom = function () {
-    setOnAtomChangeMethod.call(this);
-    atom.on(this);
-  },
-
-  setOnAtomChangeMethod = function () {
-    if (this.atom && !this.atom.onChange) {
-      this.atom.onChange = this.forceUpdate;
-    }
-  },
-
   // state
 
   wrapSetStateMethod = function () {
@@ -39,6 +26,22 @@ var
     if (_.isString(key) && _.isFunction(_.get(this, 'onSetState[' + key + ']'))) {
       this.onSetState[key].call(this);
     }
+  },
+
+  // atom
+
+  initAtom = function () {
+    if (this.atomListeners) {
+      this.atomConf = {
+        listeners: [
+          {
+            attrs: this.atomListeners,
+            onChange: 'forceUpdate'
+          }
+        ]
+      };
+    }
+    atom.on(this);
   },
 
   // props
@@ -106,10 +109,6 @@ React.createClass = function (spec) {
     return _.result(this, 'initialState') || null;
   };
 
-  // atom
-
-  spec.atomGet = atom.get;
-
   // events
 
   spec.onEv = function (listener) {
@@ -124,8 +123,8 @@ React.createClass = function (spec) {
 
   spec.stopEvent = function (ev) {
     if (ev) {
-      ev.nativeEvent.preventDefault();
-      ev.nativeEvent.stopPropagation();
+      ev.preventDefault();
+      ev.stopPropagation();
     }
   };
 

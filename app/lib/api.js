@@ -1,22 +1,21 @@
 'use strict';
 
 var _ = require('lodash'),
-  atom = require('atom'),
-  api = require('api');
+  Atom = require('atom'),
+  Api = require('api');
 
 var
 
   atomAttr = {
+    error: 'api',
     errorCode: 'api.errorCode',
     errorMsg: 'api.errorMsg'
   },
 
-  // atom
-
   toggleAtomState = function (options, state) {
     var atomState = _.get(options, 'atom.state');
     if (atomState) {
-      atom.set(atomState, state);
+      Atom.set(atomState, state);
     }
   },
 
@@ -27,10 +26,10 @@ var
     if (atomOptions) {
       data = changeAtomGetData(options);
       method = changeAtomGetMethod(options);
-      if (['atomUpdate', 'atomRemove'].indexOf(method) >= 0) {
-        atom[method](atomOptions.attr, data, atomOptions.where, atomOptions.options);
+      if (['update', 'remove'].indexOf(method) >= 0) {
+        Atom[method](atomOptions.attr, data, atomOptions.where, atomOptions.options);
       } else {
-        atom[method](atomOptions.attr, data, atomOptions.options);
+        Atom[method](atomOptions.attr, data, atomOptions.options);
       }
     }
   },
@@ -51,7 +50,7 @@ var
           method = 'remove';
           break;
         default:
-          method = _.isArray(atom.get(options.atom.attr)) ? 'concat' : 'set';
+          method = 'set';
       }
     }
     return method;
@@ -61,7 +60,8 @@ var
     return _.get(options.resDataParsed, options.atom.prefix || '');
   };
 
-api.setConfig({
+Api.setConfig({
+
   baseUrl: 'http://localhost:2999/',
   ctx: this,
   handledErrors: [503],
@@ -75,13 +75,24 @@ api.setConfig({
   },
 
   onKo (options, err) {
-    atom.set(atomAttr.errorCode, _.get(err, 'status', 'UNKNOWN_ERROR'));
-    atom.set(atomAttr.errorMsg, _.get(err, 'response.body.errorMsg', 'Unknown error'));
+    Atom.set(atomAttr.errorCode, _.get(err, 'status', 'UNKNOWN_ERROR'));
+    Atom.set(atomAttr.errorMsg, _.get(err, 'response.body.errorMsg', 'Unknown error'));
   },
 
   onSend (options) {
     toggleAtomState(options, true);
   }
+
 });
+
+module.exports = {
+
+  atomAttr,
+
+  getError () {
+    return Atom.get(atomAttr.error);
+  }
+
+};
 
 

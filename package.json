@@ -6,13 +6,12 @@
   "dependencies": {
     "api": "git://github.com/migueldelmazo/api.git",
     "atom": "git://github.com/migueldelmazo/atom.git",
-    "router": "git://github.com/migueldelmazo/router.git",
-    "express": "4.13.3",
     "lodash": "3.10.1",
     "react": "0.14.0",
+    "react-bootstrap": "^0.27.3",
     "react-dom": "0.14.0",
-    "semantik": "1.1.0",
-    "material-design-lite": "~1.0.4-2"
+    "router": "git://github.com/migueldelmazo/router.git",
+    "semantik": "1.1.0"
   },
   "devDependencies": {
     "babelify": "^5.0.3",
@@ -20,6 +19,7 @@
     "browserify": "^8.1.3",
     "del": "^1.1.1",
     "eslint-plugin-react": "3.5.1",
+    "express": "4.13.3",
     "gulp-eslint": "0.15.0",
     "gulp": "^3.8.11",
     "gulp-debug": "~2.0.0",
