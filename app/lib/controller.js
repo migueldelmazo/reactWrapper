@@ -34,22 +34,22 @@ var
   },
 
   listenAtomRoutes = function () {
-    _.assign(this, { atomConf: { listeners: [] }});
+    _.assign(this, { atomConf: { listeners: [] } });
     this.atomConf.listeners.push({
       attrs: [Router.atomAttr.router],
-      onChange: 'runRoutes'
+      cb: runRoutes
     });
   },
 
   runRoutes = function () {
     _.each(this.routes.current, function (route) {
       if (Router.isCurrent(route.name)) {
-        this[route.fn]();
+        _.runCb(this, route.fn);
       }
     }, this);
     _.each(this.routes.parent, function (route) {
       if (Router.isParent({ name: route.name, level: route.level })) {
-        this[route.fn]();
+        _.runCb(this, route.fn);
       }
     }, this);
   };
@@ -58,7 +58,6 @@ var
 
 ControllerClass.prototype.atom = Atom;
 ControllerClass.prototype.apiSend = Api.apiSend;
-ControllerClass.prototype.runRoutes = runRoutes;
 
 module.exports = {
 

@@ -51,14 +51,16 @@ module.exports = {
 
   isParent (name) {
     var parentNames = _.pluck(Atom.get(atomAttr.parents), 'name');
-    return !!_.find(_.parseArray(name), function (name) {
-      if (_.isString(name)) {
-        return parentNames.indexOf(name) >= 0;
-      } else if (!isNaN(name.level)) {
-        return parentNames[parentNames.length - name.level] === name.name;
+    return !!_.find(_.parseArray(name), function (routeName) {
+      var found = false;
+      if (_.isString(routeName)) {
+        found = parentNames.indexOf(routeName) >= 0;
+      } else if (!isNaN(routeName.level)) {
+        found = parentNames[parentNames.length - routeName.level] === routeName.name;
       } else {
-        return parentNames.indexOf(name.name) >= 0;
+        found = parentNames.indexOf(routeName.name) >= 0;
       }
+      return found;
     });
   },
 
