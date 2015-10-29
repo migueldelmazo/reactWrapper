@@ -2,3 +2,7 @@ body {
   padding: 20px 0;
   background: #eee;
 }
+
+.user-edit-icon {
+  float: right;
+}

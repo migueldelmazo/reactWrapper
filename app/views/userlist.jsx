@@ -14,13 +14,13 @@ module.exports = React.createClass({
   renderList () {
     return _.map(UsersCtrl.getList(), function (user) {
       return (
-        <li key={user.id}>
+        <li className='list-group-item' key={user.id}>
+          <a href={Router.getUrl('userEdit', { user: user.id })} className='user-edit-icon'>
+            <span className='glyphicon glyphicon-pencil' aria-hidden='true' />
+          </a>
           <h4>{user.username}</h4>
           <p>{user.email}</p>
           <p>{user.biography}</p>
-          <a href={Router.getUrl('userEdit', { user: user.id } )}>
-            <span className='glyphicon glyphicon-pencil' aria-hidden='true' />
-          </a>
         </li>
       );
     });
@@ -31,7 +31,7 @@ module.exports = React.createClass({
       <div className='panel panel-default'>
         <div className='panel-body'>
           <h2>Users list</h2>
-          <ul>
+          <ul className='list-group'>
             {this.renderList()}
           </ul>
         </div>
