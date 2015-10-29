@@ -15,7 +15,7 @@ var
     this.setState = _.wrap(this.setState, function (setStateMethod, key, val) {
       var obj = _.parseToObj(key, val),
         newState = _.extend({}, this.state, obj);
-      if (!_.isEqual(this.state, newState)) {
+      if (!this.isViewBlocked() && !_.isEqual(this.state, newState)) {
         setStateMethod.call(this, obj);
         onSetState.call(this, key);
       }
@@ -23,8 +23,8 @@ var
   },
 
   onSetState = function (key) {
-    if (_.isString(key) && _.isFunction(_.get(this, 'onSetState[' + key + ']'))) {
-      this.onSetState[key].call(this);
+    if (_.isString(key) && _.has(this, 'onSetState.' + key)) {
+      _.runCb(this, 'onSetState.' + key);
     }
   },
 
@@ -36,7 +36,7 @@ var
         listeners: [
           {
             attrs: this.atomListeners,
-            onChange: 'forceUpdate'
+            cb: 'forceUpdate'
           }
         ]
       };
@@ -114,8 +114,7 @@ React.createClass = function (spec) {
   spec.onEv = function (listener) {
     var args = _.slice(arguments, 1);
     return function (ev) {
-      var dontStopEvent = listener.apply(this, args.concat(ev));
-      if (dontStopEvent !== true) {
+      if (!this.isViewBlocked() && listener.apply(this, args.concat(ev)) !== true) {
         this.stopEvent(ev);
       }
     }.bind(this);
@@ -137,6 +136,14 @@ React.createClass = function (spec) {
     sufixClass = sufixClass === undefined ? '' : sufixClass;
     return prefixClass + (status ? trueClass : falseClass) + sufixClass;
   };
+
+  // blocked view
+
+  if (!spec.isViewBlocked) {
+    spec.isViewBlocked = function () {
+      return false;
+    };
+  }
 
   return React._createClass(spec);
 };

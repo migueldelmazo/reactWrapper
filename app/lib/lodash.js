@@ -31,9 +31,15 @@ _.mixin({
     return obj;
   },
 
-  resultWithArgs (obj, path) {
-    var result = _.get(obj, path);
-    return _.isFunction(result) ? result.apply(obj, _.slice(arguments, 2)) : result;
+  resultWithArgs (ctx, path) {
+    var result = _.get(ctx, path);
+    return _.isFunction(result) ? result.apply(ctx, _.slice(arguments, 2)) : result;
+  },
+
+  runCb (ctx, cb) {
+    var callback = _.get(ctx, cb);
+    callback = _.isString(callback) ? ctx[callback] : callback;
+    return callback.apply(ctx, _.slice(arguments, 2));
   }
 
 });

@@ -42,7 +42,7 @@ module.exports = React.createClass({
     UsersCtrl.apiNewUser(_.pick(this.state, ['username', 'email', 'biography']));
   },
 
-  isFormProcessing () {
+  isViewBlocked () {
     return UsersCtrl.apiIsCreating();
   },
 
@@ -81,6 +81,7 @@ module.exports = React.createClass({
             {this.fgSubmit({
               value: 'Send',
               processingValue: 'Sending...',
+              processingState: UsersCtrl.apiIsCreating(),
               type: 'primary',
               size: 'lg'
             })}

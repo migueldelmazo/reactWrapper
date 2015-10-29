@@ -8,10 +8,8 @@ var
   // form: DOM events
 
   formOnChangeItem = function (key, val) {
-    if (!_.result(this, 'isFormProcessing')) {
-      this.setState(key, val);
-      this.validationAddChangedField(key);
-    }
+    this.setState(key, val);
+    this.validationAddChangedField(key);
   },
 
   formOnChangeTextField = function (options, ev) {
@@ -24,12 +22,12 @@ var
 
   // form: helpers
 
-  formIsSubmitDisabled = function () {
-    return !_.result(this, 'isFormProcessing') ? !this.validationIsValidForm() : true;
+  formIsSubmitDisabled = function (options) {
+    return options.processingState ? true : !this.validationIsValidForm();
   },
 
   formGetSubmitValue = function (options) {
-    return !_.result(this, 'isFormProcessing') ? options.value : options.processingValue || options.value;
+    return options.processingState ? options.processingValue : options.value;
   },
 
   // validations: validate field
@@ -86,7 +84,7 @@ module.exports = {
     return (
       <button
         type={_.get(options, 'type', 'submit')}
-        disabled={formIsSubmitDisabled.call(this)}
+        disabled={formIsSubmitDisabled.call(this, options)}
         className={_.get(options, 'className', '')}
         onClick={this.onEv(formOnClickSubmit, options)}>
         {formGetSubmitValue.call(this, options)}
