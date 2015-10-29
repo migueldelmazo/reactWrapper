@@ -29,9 +29,19 @@ module.exports = CtrlClass.create({
   // routes
 
   routes: {
-    name: {
-      users: 'apiGetUsers'
-    }
+    current: [
+      {
+        name: 'users',
+        fn: 'apiGetUsers'
+      }
+    ],
+    parent: [
+      {
+        name: 'users',
+        level: 1,
+        fn: 'apiGetUsers'
+      }
+    ]
   },
 
   // getters / setters

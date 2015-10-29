@@ -10,7 +10,7 @@ var
   ControllerClass = function (options) {
     bindAll(this, options);
     _.result(this, 'init');
-    runRoutes.call(this);
+    initRoutes.call(this);
     Atom.on(this);
   },
 
@@ -26,20 +26,39 @@ var
 
   // routes
 
-  runRoutes = function () {
-  // TODO: bind controller to atom.routes
-    var fns = _.get(this, 'routes.name.' + Router.getCurrentRoute());
-    if (fns) {
-      _.each(_.parseArray(fns), function (fn) {
-        this[fn]();
-      }, this);
+  initRoutes = function () {
+    if (this.routes) {
+      listenAtomRoutes.call(this);
+      runRoutes.call(this);
     }
+  },
+
+  listenAtomRoutes = function () {
+    _.assign(this, { atomConf: { listeners: [] }});
+    this.atomConf.listeners.push({
+      attrs: [Router.atomAttr.router],
+      onChange: 'runRoutes'
+    });
+  },
+
+  runRoutes = function () {
+    _.each(this.routes.current, function (route) {
+      if (Router.isCurrent(route.name)) {
+        this[route.fn]();
+      }
+    }, this);
+    _.each(this.routes.parent, function (route) {
+      if (Router.isParent({ name: route.name, level: route.level })) {
+        this[route.fn]();
+      }
+    }, this);
   };
 
 // aliases
 
 ControllerClass.prototype.atom = Atom;
 ControllerClass.prototype.apiSend = Api.apiSend;
+ControllerClass.prototype.runRoutes = runRoutes;
 
 module.exports = {
 

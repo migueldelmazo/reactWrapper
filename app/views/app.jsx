@@ -22,22 +22,22 @@ module.exports = React.createClass({
           <Col md={2}>
             <Menu />
           </Col>
-          <RouterComponent routeName='index'>
+          <RouterComponent current='index'>
             <Col md={10}>
               <Home />
             </Col>
           </RouterComponent>
-          <RouterComponent routeName='users' parentRouteName='users'>
+          <RouterComponent current='users' parent={{ name: 'users' }}>
             <Col md={6}>
               <UserList />
             </Col>
           </RouterComponent>
-          <RouterComponent routeName='userAdd'>
+          <RouterComponent current='userAdd'>
             <Col md={4}>
               <UserForm />
             </Col>
           </RouterComponent>
-          <RouterComponent routeName='userEdit'>
+          <RouterComponent current='userEdit'>
             <Col md={4}>
               <UserForm />
             </Col>

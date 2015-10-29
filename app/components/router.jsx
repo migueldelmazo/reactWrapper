@@ -17,9 +17,9 @@ module.exports = React.createClass({
 
   render () {
     var props = this.props,
-      isCurrentRoute = props.routeName ? Router.isCurrentRoute(props.routeName) : false,
-      isParentRoute = props.parentRouteName ? Router.isParentRoute(props.parentRouteName) : false;
-    return isCurrentRoute || isParentRoute ? props.children : null;
+      isCurrent = props.current ? Router.isCurrent(props.current) : false,
+      isParent = props.parent ? Router.isParent(props.parent) : false;
+    return isCurrent || isParent ? props.children : null;
   }
 
 });

@@ -6,14 +6,14 @@ var _ = require('lodash'),
 
 var atomAttr = {
     router: 'router',
-    routes: 'router.routes',
+    parents: 'router.parents',
     currentName: 'router.currentName',
     currentValues: 'router.currentValues'
   };
 
 Router.onChangeHash(function (routes) {
-  var currentRouter = _.last(routes);
-  Atom.set(atomAttr.routes, routes);
+  var currentRouter = routes.pop();
+  Atom.set(atomAttr.parents, routes);
   Atom.set(atomAttr.currentName, currentRouter.name);
   Atom.set(atomAttr.currentValues, currentRouter.values);
 });
@@ -45,20 +45,21 @@ module.exports = {
 
   atomAttr,
 
-  isCurrentRoute (name) {
-    return Atom.get(atomAttr.currentName) === name;
+  isCurrent (name) {
+    return _.parseArray(name).indexOf(Atom.get(atomAttr.currentName)) >= 0;
   },
 
-  isParentRoute (name) {
-    return _.find(Atom.get(atomAttr.routes), { name });
-  },
-
-  getCurrentRoute () {
-    return Atom.get(atomAttr.currentName);
-  },
-
-  getParentRoutes () {
-    return Atom.get(atomAttr.routes);
+  isParent (name) {
+    var parentNames = _.pluck(Atom.get(atomAttr.parents), 'name');
+    return !!_.find(_.parseArray(name), function (name) {
+      if (_.isString(name)) {
+        return parentNames.indexOf(name) >= 0;
+      } else if (!isNaN(name.level)) {
+        return parentNames[parentNames.length - name.level] === name.name;
+      } else {
+        return parentNames.indexOf(name.name) >= 0;
+      }
+    });
   },
 
   getUrl: Router.getUrl
