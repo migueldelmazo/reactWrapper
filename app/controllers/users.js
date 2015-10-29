@@ -4,6 +4,10 @@ var CtrlClass = require('../lib/controller');
 
 var atomAttr = {
     list: 'users.list',
+    newUser: 'users.new',
+    newUserUsername: 'users.new.username',
+    newUserEmail: 'users.new.email',
+    newUserBiography: 'users.new.biography',
     apiCreating: 'users.creating'
   };
 
@@ -18,6 +22,18 @@ module.exports = CtrlClass.create({
       {
         attr: atomAttr.list,
         value: []
+      },
+      {
+        attr: atomAttr.newUserUsername,
+        value: ''
+      },
+      {
+        attr: atomAttr.newUserEmail,
+        value: ''
+      },
+      {
+        attr: atomAttr.newUserBiography,
+        value: ''
       },
       {
         attr: atomAttr.apiCreating,
@@ -68,11 +84,25 @@ module.exports = CtrlClass.create({
     });
   },
 
-  apiNewUser (user) {
+  apiNewUserFromState (user) {
     this.apiSend({
       method: 'POST',
       url: 'users',
       reqData: user,
+      atom: {
+        state: atomAttr.apiCreating
+      },
+      onOk () {
+        this.apiGetUsers();
+      }
+    });
+  },
+
+  apiNewUserFromAtom () {
+    this.apiSend({
+      method: 'POST',
+      url: 'users',
+      reqData: this.atom.get(atomAttr.newUser),
       atom: {
         state: atomAttr.apiCreating
       },

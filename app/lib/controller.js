@@ -34,7 +34,8 @@ var
   },
 
   listenAtomRoutes = function () {
-    _.assign(this, { atomConf: { listeners: [] } });
+    this.atomConf = this.atomConf || {};
+    this.atomConf.listeners = this.atomConf.listeners || [];
     this.atomConf.listeners.push({
       attrs: [Router.atomAttr.router],
       cb: runRoutes

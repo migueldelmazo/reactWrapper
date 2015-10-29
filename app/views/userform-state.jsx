@@ -3,7 +3,7 @@
 var _ = require('lodash'),
   React = require('react'),
   Semantik = require('semantik'),
-  FormMixin = require('../mixins/form'),
+  FormStateMixin = require('../mixins/form-state'),
   FormGroupMixin = require('../mixins/form-group'),
   UsersCtrl = require('../controllers/users');
 
@@ -11,7 +11,7 @@ module.exports = React.createClass({
 
   displayName: __filename,
 
-  mixins: [FormMixin, FormGroupMixin],
+  mixins: [FormStateMixin, FormGroupMixin],
 
   atomListeners: [UsersCtrl.atomAttr.apiCreating],
 
@@ -39,7 +39,7 @@ module.exports = React.createClass({
   },
 
   submitForm () {
-    UsersCtrl.apiNewUser(_.pick(this.state, ['username', 'email', 'biography']));
+    UsersCtrl.apiNewUserFromState(_.pick(this.state, ['username', 'email', 'biography']));
   },
 
   isViewBlocked () {
@@ -50,7 +50,7 @@ module.exports = React.createClass({
     return (
       <div className='panel panel-default'>
         <div className='panel-body'>
-          <h2>User form</h2>
+          <h2>User form: state</h2>
           <form onSubmit={this.onEv(this.formOnSubmit)}>
 
             {this.fgText({

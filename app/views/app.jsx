@@ -7,7 +7,8 @@ var React = require('react'),
   Home = require('./home.jsx'),
   Menu = require('./menu.jsx'),
   UserList = require('./userlist.jsx'),
-  UserForm = require('./userform.jsx'),
+  UserFormState = require('./userform-state.jsx'),
+  UserFormAtom = require('./userform-atom.jsx'),
   RouterComponent = require('../components/router.jsx');
 
 module.exports = React.createClass({
@@ -28,18 +29,23 @@ module.exports = React.createClass({
             </Col>
           </RouterComponent>
           <RouterComponent current='users' parent={{ name: 'users' }}>
-            <Col md={6}>
+            <Col md={4}>
               <UserList />
             </Col>
           </RouterComponent>
           <RouterComponent current='userAdd'>
-            <Col md={4}>
-              <UserForm />
+            <Col md={3}>
+              <UserFormState />
+            </Col>
+          </RouterComponent>
+          <RouterComponent current='userAdd'>
+            <Col md={3}>
+              <UserFormAtom />
             </Col>
           </RouterComponent>
           <RouterComponent current='userEdit'>
             <Col md={4}>
-              <UserForm />
+              <UserFormState />
             </Col>
           </RouterComponent>
         </Grid>
