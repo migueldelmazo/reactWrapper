@@ -1,6 +1,7 @@
 'use strict';
 
-var CtrlClass = require('../lib/controller');
+var _ = require('lodash'),
+  CtrlClass = require('../lib/controller');
 
 var atomAttr = {
     list: 'users.list',
@@ -68,6 +69,16 @@ module.exports = CtrlClass.create({
 
   apiIsCreating () {
     return this.atom.get(atomAttr.apiCreating);
+  },
+
+  setNewUserField (value, options) {
+    var attr = _.capitalize(options.field);
+    this.atom.set(atomAttr['newUser' + attr], value);
+  },
+
+  getNewUserField (field) {
+    var attr = _.capitalize(field);
+    return this.atom.get(atomAttr['newUser' + attr]);
   },
 
   // api services

@@ -9,6 +9,7 @@ var React = require('react'),
   UserList = require('./userlist.jsx'),
   UserFormState = require('./userform-state.jsx'),
   UserFormAtom = require('./userform-atom.jsx'),
+  UserFormCtrl = require('./userform-ctrl.jsx'),
   RouterComponent = require('../components/router.jsx');
 
 module.exports = React.createClass({
@@ -34,17 +35,22 @@ module.exports = React.createClass({
             </Col>
           </RouterComponent>
           <RouterComponent current='userAdd'>
-            <Col md={3}>
+            <Col md={2}>
               <UserFormState />
             </Col>
           </RouterComponent>
           <RouterComponent current='userAdd'>
-            <Col md={3}>
+            <Col md={2}>
               <UserFormAtom />
             </Col>
           </RouterComponent>
+          <RouterComponent current='userAdd'>
+            <Col md={2}>
+              <UserFormCtrl />
+            </Col>
+          </RouterComponent>
           <RouterComponent current='userEdit'>
-            <Col md={4}>
+            <Col md={6}>
               <UserFormState />
             </Col>
           </RouterComponent>
