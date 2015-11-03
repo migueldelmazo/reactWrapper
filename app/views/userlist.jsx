@@ -2,7 +2,6 @@
 
 var _ = require('lodash'),
   React = require('react'),
-  Router = require('../lib/router'),
   UsersCtrl = require('../controllers/users');
 
 module.exports = React.createClass({

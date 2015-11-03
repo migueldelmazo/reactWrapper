@@ -19,18 +19,18 @@ module.exports = React.createClass({
 
   validations: {
     username: {
-      callback: UsersCtrl.getNewUserField,
+      getValueCb: UsersCtrl.getNewUserField,
       fn: Semantik.isNotEmpty,
       msg: 'Please enter your username'
     },
     email: [
       {
-        callback: UsersCtrl.getNewUserField,
+        getValueCb: UsersCtrl.getNewUserField,
         fn: Semantik.isNotEmpty,
         msg: 'Please enter your email'
       },
       {
-        callback: UsersCtrl.getNewUserField,
+        getValueCb: UsersCtrl.getNewUserField,
         regex: Semantik.regex.isEmail,
         msg: 'Please enter a valid email'
       }
@@ -54,8 +54,10 @@ module.exports = React.createClass({
 
             {this.fgText({
               label: '* Username:',
-              callback: UsersCtrl.setNewUserField,
-              callbackOptions: { field: 'username' },
+              setValueCb: UsersCtrl.setNewUserField,
+              setValueParams: { field: 'username' },
+              getValueCb: UsersCtrl.getNewUserField,
+              getValueParams: { field: 'username' },
               validationKey: 'username',
               placeholder: 'Username',
               size: 'lg'
@@ -64,8 +66,10 @@ module.exports = React.createClass({
 
             {this.fgText({
               label: '* Email:',
-              callback: UsersCtrl.setNewUserField,
-              callbackOptions: { field: 'email' },
+              setValueCb: UsersCtrl.setNewUserField,
+              setValueParams: { field: 'email' },
+              getValueCb: UsersCtrl.getNewUserField,
+              getValueParams: { field: 'email' },
               validationKey: 'email',
               placeholder: 'Email address'
             })}
@@ -73,7 +77,10 @@ module.exports = React.createClass({
 
             {this.fgTextarea({
               label: 'Biography:',
-              atomAttr: UsersCtrl.atomAttr.newUserBiography,
+              setValueCb: UsersCtrl.setNewUserField,
+              setValueParams: { field: 'biography' },
+              getValueCb: UsersCtrl.getNewUserField,
+              getValueParams: { field: 'biography' },
               placeholder: 'Biography',
               rows: 8
             })}

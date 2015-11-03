@@ -87,6 +87,17 @@ module.exports = CtrlClass.create({
     this.apiSend({
       method: 'GET',
       url: 'users',
+      checkAfterCalling: {
+        'users[].id': ['isRequired', 'isNumber', { cb: 'isNumberGreatThan', params: [0, true] }],
+        'users[].username': ['isRequired', 'isStringNotEmpty'],
+        'users[].email': ['isRequired', 'isStringNotEmpty', 'isEmail'],
+        'users[].biography': ['isRequired', 'isString']
+      },
+      parseAfterCalling: {
+        'users[].email' (email) {
+          return email + ' <' + email + '>';
+        }
+      },
       atom: {
         prefix: 'users',
         attr: atomAttr.list
@@ -99,6 +110,17 @@ module.exports = CtrlClass.create({
       method: 'POST',
       url: 'users',
       reqData: user,
+      checkAfterCalling: {
+        'id': ['isRequired', 'isNumber', { cb: 'isNumberGreatThan', params: [0, true] }],
+        'username': ['isRequired', 'isStringNotEmpty'],
+        'email': ['isRequired', 'isStringNotEmpty', 'isEmail'],
+        'biography': ['isRequired', 'isString']
+      },
+      parseAfterCalling: {
+        'email' (email) {
+          return email + ' <' + email + '>';
+        }
+      },
       atom: {
         state: atomAttr.apiCreating,
         attr: atomAttr.list

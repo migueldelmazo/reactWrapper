@@ -2,16 +2,16 @@ var _ = require('lodash');
 
 var users = [
     {
-      "id": 0,
-      "username": "John Doe",
-      "email": "john.doe@gmail.com",
-      "biography": "Lorem ipsum"
+      'id': 0,
+      'username': 'John Doe',
+      'email': 'john.doe@gmail.com',
+      'biography': 'Lorem ipsum'
     },
     {
-      "id": 1,
-      "username": "John Smith",
-      "email": "john.smith@gmail.com",
-      "biography": "dolorem ipsum quia"
+      'id': 1,
+      'username': 'John Smith',
+      'email': 'john.smith@gmail.com',
+      'biography': 'dolorem ipsum quia'
     }
   ];
 

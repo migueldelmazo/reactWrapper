@@ -9,8 +9,8 @@ var
   // form: DOM events
 
   formOnChangeItem = function (options, val) {
-    if (_.isFunction(options.callback)) {
-      options.callback(val, options.callbackOptions || {});
+    if (_.isFunction(options.setValueCb)) {
+      options.setValueCb(val, options.setValueParams || {});
     }
     this.validationAddChangedField(options.validationKey);
   },
@@ -38,7 +38,7 @@ var
   validationGetValidationField = function (field) {
     var validations = _.parseArray(this.validations[field]);
     return _.filter(validations, function (validation) {
-      var val = validation.callback(field);
+      var val = validation.getValueCb(field);
       return validation.regex ? !validation.regex.test(val) : !validation.fn(val);
     });
   },
@@ -63,7 +63,7 @@ module.exports = {
     return (
       <input
         type={_.get(options, 'type', 'text')}
-        defaultValue={Atom.get(options.atomAttr, '')}
+        defaultValue={options.getValueCb.call(null, options.getValueParams)}
         placeholder={_.get(options, 'placeholder', '')}
         className={_.get(options, 'className', '')}
         onChange={this.onEv(formOnChangeTextField, options)} />
@@ -74,7 +74,7 @@ module.exports = {
     options = options || {};
     return (
       <textarea
-        value={_.get(options, 'val', '')}
+        value={options.getValueCb.call(null, options.getValueParams)}
         placeholder={_.get(options, 'placeholder')}
         rows={_.get(options, 'rows')}
         className={_.get(options, 'className', '')}

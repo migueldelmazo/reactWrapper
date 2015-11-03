@@ -72,7 +72,7 @@ module.exports = {
     options = options || {};
     return (
       <textarea
-        value={_.get(options, 'val', '')}
+        defaultValue={Atom.get(options.atomAttr, '')}
         placeholder={_.get(options, 'placeholder')}
         rows={_.get(options, 'rows')}
         className={_.get(options, 'className', '')}
