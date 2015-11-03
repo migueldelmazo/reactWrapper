@@ -30,10 +30,6 @@ Router.addRoutes([
           {
             name: 'userAdd',
             path: 'add'
-          },
-          {
-            name: 'userEdit',
-            path: ':user'
           }
         ]
       }

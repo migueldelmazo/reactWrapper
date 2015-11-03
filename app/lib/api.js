@@ -57,7 +57,7 @@ var
   },
 
   changeAtomGetData = function (options) {
-    return _.get(options.resDataParsed, options.atom.prefix || '');
+    return options.atom.prefix ? _.get(options.resDataParsed, options.atom.prefix) : options.resDataParsed;
   };
 
 Api.setConfig({

@@ -87,7 +87,6 @@ module.exports = CtrlClass.create({
     this.apiSend({
       method: 'GET',
       url: 'users',
-      reqData: {},
       atom: {
         prefix: 'users',
         attr: atomAttr.list
@@ -101,10 +100,8 @@ module.exports = CtrlClass.create({
       url: 'users',
       reqData: user,
       atom: {
-        state: atomAttr.apiCreating
-      },
-      onOk () {
-        this.apiGetUsers();
+        state: atomAttr.apiCreating,
+        attr: atomAttr.list
       }
     });
   },
@@ -115,10 +112,8 @@ module.exports = CtrlClass.create({
       url: 'users',
       reqData: this.atom.get(atomAttr.newUser),
       atom: {
-        state: atomAttr.apiCreating
-      },
-      onOk () {
-        this.apiGetUsers();
+        state: atomAttr.apiCreating,
+        attr: atomAttr.list
       }
     });
   }

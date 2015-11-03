@@ -15,9 +15,6 @@ module.exports = React.createClass({
     return _.map(UsersCtrl.getList(), function (user) {
       return (
         <li className='list-group-item' key={user.id}>
-          <a href={Router.getUrl('userEdit', { user: user.id })} className='user-edit-icon'>
-            <span className='glyphicon glyphicon-pencil' aria-hidden='true' />
-          </a>
           <h4>{user.username}</h4>
           <p>{user.email}</p>
           <p>{user.biography}</p>

@@ -17,7 +17,7 @@ module.exports = React.createClass({
 
   initialState: {
     username: '',
-    email: 'info@migueldelmazo.com',
+    email: '',
     biography: ''
   },
 

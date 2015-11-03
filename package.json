@@ -6,6 +6,7 @@
   "dependencies": {
     "api": "git://github.com/migueldelmazo/api.git",
     "atom": "git://github.com/migueldelmazo/atom.git",
+    "body-parser": "^1.14.1",
     "lodash": "3.10.1",
     "react": "0.14.0",
     "react-bootstrap": "^0.27.3",

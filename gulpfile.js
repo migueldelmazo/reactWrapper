@@ -49,8 +49,8 @@ gulp.task('browserify', function() {
 });
 
 gulp.task('watch', function() {
-  gulp.watch('app/**/*.jsx', ['lint', 'browserify']);
-  gulp.watch('app/**/*.js', ['lint', 'browserify']);
+  gulp.watch('app/**/*.jsx', [/*'lint', */'browserify']);
+  gulp.watch('app/**/*.js', [/*'lint', */'browserify']);
   gulp.watch('html/**/*', ['copy-html']);
   gulp.watch('css/**/*', ['copy-css']);
   gulp.watch(['api/*', 'api/**/*.js'], ['express']);

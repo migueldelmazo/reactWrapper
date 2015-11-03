@@ -1,32 +1,17 @@
 process.title = 'reactWrapper express';
 
 var express = require('express'),
+  bodyParser = require('body-parser'),
+  api = require('./api'),
+  config = require('./config'),
   crossdomain = require('./crossdomain'),
   app = express();
 
 app.use(crossdomain);
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+api(app);
 
-app.all('/*', function (req, res) {
-  setTimeout(function () {
-    res.send({
-      "users": [
-        {
-          "id": 1,
-          "username": "John Doe",
-          "email": "john.doe@gmail.com",
-          "biography": "Lorem ipsum"
-        },
-        {
-          "id": 2,
-          "username": "John Smith",
-          "email": "john.smith@gmail.com",
-          "biography": "dolorem ipsum quia"
-        }
-      ]
-    });
-  }, 1000);
-});
-
-var server = app.listen(2999, function () {
+var server = app.listen(config.serverPort, function () {
   console.log('Express port:', server.address().port);
 });
