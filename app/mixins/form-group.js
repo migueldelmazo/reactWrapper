@@ -42,7 +42,7 @@ module.exports = {
     return this.formSubmit(options);
   },
 
-  fnValidation (field) {
+  fgValidation (field) {
     return this.validationRender(field, ValidationComponent);
   }
 

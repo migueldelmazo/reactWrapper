@@ -60,7 +60,7 @@ module.exports = React.createClass({
               placeholder: 'Username',
               size: 'lg'
             })}
-            {this.fnValidation('username')}
+            {this.fgValidation('username')}
 
             {this.fgText({
               label: '* Email:',
@@ -68,7 +68,7 @@ module.exports = React.createClass({
               val: this.state.email,
               placeholder: 'Email address'
             })}
-            {this.fnValidation('email')}
+            {this.fgValidation('email')}
 
             {this.fgTextarea({
               label: 'Biography:',
