@@ -16,11 +16,7 @@ var
 
   bindAll = function (ctx, options) {
     _.each(options, function (value, key) {
-      if (_.isFunction(value)) {
-        ctx[key] = value.bind(ctx);
-      } else {
-        ctx[key] = value;
-      }
+      ctx[key] = _.isFunction(value) ? value.bind(ctx) : value;
     });
   },
 
